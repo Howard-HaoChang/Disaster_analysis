@@ -1,6 +1,6 @@
 # Data sources
 
-```{r}
+```{r, message=F, echo=F, warning=F}
 library(tidyverse)
 ```
 

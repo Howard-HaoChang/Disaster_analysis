@@ -1,1 +1,13 @@
 # Missing values
+
+```{r, message=F, echo=F, warning=F}
+library(readxl)
+library(redav)
+library(tidyverse)
+library(mi)
+library(sf)
+library(tmap)
+library(zoo)
+```
+
+
