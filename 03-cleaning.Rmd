@@ -5,6 +5,7 @@ library(tidyverse)
 library(countrycode)
 ```
 
+## Read GDP data
 ```{r}
 df_covid_raw = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
 covid_df = df_covid_raw %>% select(-(1:4)) 
@@ -17,9 +18,28 @@ head(covid_df)
 ```
 
 ```{r}
+countryname(unique(covid_df$Country.Region))
+countryname(unique(disaster))
+```
+Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :
+  Some values were not matched unambiguously: Diamond Princess, Micronesia, MS Zaandam, Summer Olympics 2020, Winter Olympics 2022
+  
+```{r}
+#remove Summer Olympics 2020 & Winter Olympics 2022,Micronesia
+covid_remove <- covid_df[-which(covid_df$Country.Region %in% c("Summer Olympics 2020", "Winter Olympics 2022", "Micronesia")),]
+#Diamond Princess - Japan
+covid_remove$Country.Region[covid_remove$Country.Region == "Diamond Princess"] <- "Japan"
+#MS Zaandam - Netherlands
+covid_remove$Country.Region[covid_remove$Country.Region == "MS Zaandam"] <- "Netherlands"
+```
+
+```{r}
 GDP = read.csv("data/world_bank_gdp.csv")
 ```
 
+```{r}
+countryname(unique(GDP$Country.Name))
+```
 
 ```{r}
 raw_data <- readxl::read_xlsx("data/disaster data.xlsx")
@@ -29,7 +49,6 @@ latitude.longtitude.data <- map_data("world")
 
 ```{r}
 countryname(unique(data_temp$Country))
-countryname(unique(latitude.longtitude.data$region))
 ```
 Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :
   Some values were not matched unambiguously: Azores Islands, Canary Is, Serbia Montenegro, Yemen P Dem Rep
@@ -77,5 +96,7 @@ data.both.match <- map_match[map_match$country.name %in% unique(disaster_match$c
 
 ```{r}
 disaster <- disaster_match %>%
-  select("Year","Disaster Group","Disaster Subgroup","Disaster Subsubtype","Country","ISO","Region","Continent","Total Deaths","Total Damages ('000 US$)","Total Damages, Adjusted ('000 US$)")
+  select("Year","Disaster Group","Disaster Subgroup","Country","ISO","Region","Continent","Total Deaths","Total Damages ('000 US$)","Total Damages, Adjusted ('000 US$)")
+
+colnames(disaster) <- c("Year","Disaster Group","Disaster Subgroup","Country","ISO","Region","Continent","Total Deaths","Total Damages","Total Damages Adjusted")
 ```
