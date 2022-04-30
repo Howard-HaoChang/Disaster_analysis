@@ -1,19 +1,27 @@
 # Data sources
 
-
-```{r}
+```{r,echo=FALSE, message=FALSE, results='hide'}
 library(tidyverse)
+COVID = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
+GDP = read.csv("data/world_bank_gdp.csv")
 ```
 
-```{r}
-df_covid_raw = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
-covid_df = df_covid_raw %>% select(-(1:4)) 
-covid_df = cbind("Country.Region" = df$Country.Region, 
-                 "Total.Death" = rowSums(covid_df)) %>% data.frame()
-covid_df = covid_df %>% mutate("Total.Death" = as.numeric(Total.Death)) %>% 
-  group_by(Country.Region) %>% 
-  summarise("Total.Death" = sum(Total.Death, na.rm = T))
-head(covid_df)
-```
+
+## Deasester Data
+
+Our disaster Data is coming from [The International Disaster Data Center for research on the Epidemiology of Disaster](https://public.emdat.be/data). We downloaded the dataset with default setting. The web page is as shown below:
+
+![International Disaster Data Center Website](docs/disaster_web_Image.png)
+The source of the dataset is described as below, and hence high credibility.
+> The database is compiled from various sources including UN, governmental and non-governmental agencies, insurance companies, research institutes and press agencies. As there can be conflicting information and figures, CRED has established a method of ranking these sources according to their ability to provide trustworthy and complete data. In the majority of cases, a disaster will only be entered into EM-DAT if at least two sources report the disaster's occurrence in terms of deaths and/or affected persons.
+
+
+## 
+
+
+
+
+
+
 
 

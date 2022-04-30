@@ -1,1 +1,21 @@
 # Data transformation
+
+```{r,echo=FALSE, message=FALSE, results='hide'}
+library(tidyverse)
+```
+
+```{r}
+df_covid_raw = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
+covid_df = df_covid_raw %>% select(-(1:4)) 
+covid_df = cbind("Country.Region" = df_covid_raw$Country.Region, 
+                 "Total.Death" = rowSums(covid_df)) %>% data.frame()
+covid_df = covid_df %>% mutate("Total.Death" = as.numeric(Total.Death)) %>% 
+  group_by(Country.Region) %>% 
+  summarise("Total.Death" = sum(Total.Death, na.rm = T))
+head(covid_df)
+```
+
+```{r}
+GDP = read.csv("data/world_bank_gdp.csv")
+```
+
