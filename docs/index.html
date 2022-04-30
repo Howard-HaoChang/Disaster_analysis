@@ -4,27 +4,28 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>YOUR TITLE HERE</title>
-  <meta name="description" content="YOUR TITLE HERE" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <title>Disaster Analysis</title>
+  <meta name="description" content="Disaster Analysis" />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="YOUR TITLE HERE" />
+  <meta property="og:title" content="Disaster Analysis" />
   <meta property="og:type" content="book" />
-  
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="YOUR TITLE HERE" />
+  <meta name="twitter:title" content="Disaster Analysis" />
   
   
   
 
-<meta name="author" content="YOUR NAMES HERE" />
+<meta name="author" content="Jiachen Liu" />
+<meta name="author" content="Hao Chang" />
+<meta name="author" content="Yihui Xie" />
 
 
-<meta name="date" content="2020-11-09" />
+<meta name="date" content="2022-04-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +34,8 @@
   
 
 <link rel="next" href="data-sources.html"/>
-<script src="libs/header-attrs-2.3/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,8 +51,10 @@
 
 
 
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 
@@ -89,7 +92,7 @@
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">YOUR TITLE HERE</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Disaster Analysis</a>
           </h1>
         </div>
 
@@ -98,12 +101,17 @@
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">YOUR TITLE HERE</h1>
-<p class="author"><em>YOUR NAMES HERE</em></p>
-<p class="date"><em>2020-11-09</em></p>
+<h1 class="title">Disaster Analysis</h1>
+<p class="author"><em>Jiachen Liu</em></p>
+<p class="author"><em>Hao Chang</em></p>
+<p class="author"><em>Yihui Xie</em></p>
+<p class="date"><em>2022-04-30</em></p>
 </div>
-<div id="introduction" class="section level1" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
+<div id="introduction" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Introduction<a href="index.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>As the pandemic grow rapidly after 2020 and developed a kind of stable pattern nowadays, it has a great influence on the human livings and other activities. Actually this is not the only disaster that had a great influence on humans’ live. There are several big disaster that are greatly recorded in the history. For example, the Valdivia Earthquake Strikes Chile, the Chernobyl nuclear disaster, the Indian Ocean Tsunami etc. They’ve all made a big damage on humans’ life as well as economic.</p>
+<p>We are interested in the disaster damage pattern in different region and different time. Is there any clustering patterns? Is there a inside seasonal pattern? Is there any relation between different disasters? These are all questions that researchers are interested in. We want to use data visualization method to have an intuitive understanding of these patterns.</p>
+<p>Also, as we want to know more about the pattern of Covid-19, for we can know about the real world based on this, we also want to compare the Covid-19 pattern and other disaster. It might give us a internal understanding of nowadays pandemic.</p>
 
 </div>
             </section>
@@ -116,7 +124,6 @@
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -135,6 +142,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -143,7 +151,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/edit/main/index.Rmd",
+"link": "https://github.com/Howard-HaoChang/Disaster_analysis/edit/main/index.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -151,10 +159,14 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/blob/main/index.Rmd",
+"link": "https://github.com/Howard-HaoChang/Disaster_analysis/blob/main/index.Rmd",
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }
