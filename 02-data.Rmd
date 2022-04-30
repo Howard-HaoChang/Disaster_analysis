@@ -6,12 +6,12 @@ COVID = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/mast
 GDP = read.csv("data/world_bank_gdp.csv")
 ```
 
-
 ## Deasester Data
 
 Our disaster Data is coming from [The International Disaster Data Center for research on the Epidemiology of Disaster](https://public.emdat.be/data). We downloaded the dataset with default setting. The web page is as shown below:
 
 ![International Disaster Data Center Website](docs/disaster_web_Image.png)
+
 The source of the dataset is described as below, and hence high credibility.
 > The database is compiled from various sources including UN, governmental and non-governmental agencies, insurance companies, research institutes and press agencies. As there can be conflicting information and figures, CRED has established a method of ranking these sources according to their ability to provide trustworthy and complete data. In the majority of cases, a disaster will only be entered into EM-DAT if at least two sources report the disaster's occurrence in terms of deaths and/or affected persons.
 

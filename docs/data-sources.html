@@ -169,6 +169,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="data-sources" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Data sources<a href="data-sources.html#data-sources" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<<<<<<< HEAD
 <div id="deasester-data" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Deasester Data<a href="data-sources.html#deasester-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Our disaster Data is coming from <a href="https://public.emdat.be/data">The International Disaster Data Center for research on the Epidemiology of Disaster</a>. We downloaded the dataset with default setting. The web page is as shown below:</p>
@@ -179,6 +180,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>The database is compiled from various sources including UN, governmental and non-governmental agencies, insurance companies, research institutes and press agencies. As there can be conflicting information and figures, CRED has established a method of ranking these sources according to their ability to provide trustworthy and complete data. In the majority of cases, a disaster will only be entered into EM-DAT if at least two sources report the disaster’s occurrence in terms of deaths and/or affected persons.</p>
 </blockquote>
+=======
+>>>>>>> b6c466c96256d491f6a2f6023cf66756f44ceadf
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data-sources.html#cb1-1" aria-hidden="true" tabindex="-1"></a>df_covid_raw <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">&#39;https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv&#39;</span>)</span>
 <span id="cb1-2"><a href="data-sources.html#cb1-2" aria-hidden="true" tabindex="-1"></a>covid_df <span class="ot">=</span> df_covid_raw <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)) </span>
 <span id="cb1-3"><a href="data-sources.html#cb1-3" aria-hidden="true" tabindex="-1"></a>covid_df <span class="ot">=</span> <span class="fu">cbind</span>(<span class="st">&quot;Country.Region&quot;</span> <span class="ot">=</span> df_covid_raw<span class="sc">$</span>Country.Region, </span>
@@ -196,6 +199,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4 Andorra              77878
 ## 5 Angola              629994
 ## 6 Antarctica               0</code></pre>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="data-sources.html#cb3-1" aria-hidden="true" tabindex="-1"></a>gdp <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/world_bank_gdp.csv&quot;</span>)</span>
 <span id="cb3-2"><a href="data-sources.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gdp)</span></code></pre></div>
 <pre><code>##      ï..Series.Name    Series.Code   Country.Name Country.Code   X1960..YR1960.
@@ -317,6 +321,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4             ..
 ## 5             ..
 ## 6             ..</code></pre>
+=======
+>>>>>>> b6c466c96256d491f6a2f6023cf66756f44ceadf
 
 </div>
 </div>
