@@ -2,6 +2,7 @@
 
 ```{r,echo=FALSE, message=FALSE, results='hide'}
 library(tidyverse)
+library(countrycode)
 ```
 
 ```{r}
@@ -19,3 +20,62 @@ head(covid_df)
 GDP = read.csv("data/world_bank_gdp.csv")
 ```
 
+
+```{r}
+raw_data <- readxl::read_xlsx("data/disaster data.xlsx")
+data_temp <- raw_data
+latitude.longtitude.data <- map_data("world")
+```
+
+```{r}
+countryname(unique(data_temp$Country))
+countryname(unique(latitude.longtitude.data$region))
+```
+Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :
+  Some values were not matched unambiguously: Azores Islands, Canary Is, Serbia Montenegro, Yemen P Dem Rep
+
+Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :
+  Some values were not matched unambiguously: Ascension Island, Azores, Barbuda, Canary Islands, Chagos Archipelago, Grenadines, Heard Island, Madeira Islands, Micronesia, Saba, Saint Martin, Siachen Glacier, Sint Eustatius, Virgin Islands
+
+```{r}
+#remove the country names: "Micronesia (Federated States of)","Tuvalu"
+data_remove <- data_temp[-which(data_temp$Country %in% c("Micronesia (Federated States of)","Tuvalu")),]
+##replace the country names
+#Azores Islands - Azores
+data_remove$Country[data_remove$Country == "Azores Islands"] <- "Azores"
+#Canary Is - Canary Islands
+data_remove$Country[data_remove$Country == "Canary Is"] <- "Canary Islands"
+#Yemen P Dem Rep & Yemen Arab Rep - Yemen
+data_remove$Country[data_remove$Country %in% c("Yemen P Dem Rep","Yemen Arab Rep")] <- "Yemen"
+#Virgin Island (British) - Virgin Islands
+data_remove$Country[data_remove$Country == "Virgin Island (British)"] <- "Virgin Islands"
+#Virgin Island (U.S.) - Virgin Islands
+data_remove$Country[data_remove$Country == "Virgin Island (U.S.)"] <- "Virgin Islands"
+#Hong Kong - China
+data_remove$Country[data_remove$Country == "Hong Kong"] <- "China"
+#Macao - China
+data_remove$Country[data_remove$Country == "Macao"] <- "China"
+#Netherlands Antilles - Netherlands
+data_remove$Country[data_remove$Country == "Netherlands Antilles"] <- "Netherlands"
+#Saint Martin (French Part) - Saint Martin
+data_remove$Country[data_remove$Country == "Saint Martin (French Part)"] <- "Saint Martin"
+#Tokelau - New Zealand
+data_remove$Country[data_remove$Country == "Tokelau"] <- "New Zealand"
+```
+
+```{r}
+disaster_match <- data_remove %>% mutate(country.name = ifelse(is.na(countryname(data_remove$Country)),data_remove$Country,countryname(data_remove$Country)))
+
+map_match <- mutate(latitude.longtitude.data,country.name = ifelse(is.na(countryname(latitude.longtitude.data$region)),latitude.longtitude.data$region,countryname(latitude.longtitude.data$region)))
+
+data_final_match <- map_match[map_match$country.name %in% unique(disaster_match$country.name),]
+```
+
+```{r}
+data.both.match <- map_match[map_match$country.name %in% unique(disaster_match$country.name),]
+```
+
+```{r}
+disaster <- disaster_match %>%
+  select("Year","Disaster Group","Disaster Subgroup","Disaster Subsubtype","Country","ISO","Region","Continent","Total Deaths","Total Damages ('000 US$)","Total Damages, Adjusted ('000 US$)")
+```
