@@ -1,6 +1,5 @@
 # Data sources
 
-
 ```{r}
 library(tidyverse)
 ```
@@ -8,7 +7,7 @@ library(tidyverse)
 ```{r}
 df_covid_raw = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
 covid_df = df_covid_raw %>% select(-(1:4)) 
-covid_df = cbind("Country.Region" = df$Country.Region, 
+covid_df = cbind("Country.Region" = df_covid_raw$Country.Region, 
                  "Total.Death" = rowSums(covid_df)) %>% data.frame()
 covid_df = covid_df %>% mutate("Total.Death" = as.numeric(Total.Death)) %>% 
   group_by(Country.Region) %>% 
