@@ -34,7 +34,8 @@ covid_remove$Country.Region[covid_remove$Country.Region == "MS Zaandam"] <- "Net
 ```
 
 ```{r}
-GDP = read.csv("data/world_bank_gdp.csv")
+GDP_temp = read.csv("data/world_bank_gdp.csv")
+GDP <- GDP_temp[,-c(1,2)]
 ```
 
 ```{r}
