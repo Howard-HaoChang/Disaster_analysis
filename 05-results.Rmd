@@ -1,1 +1,14 @@
 # Results
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+df = read.csv("data/covid.csv")
+```
+
+```{r}
+df %>% arrange(desc(Total.Death))
+```
+
