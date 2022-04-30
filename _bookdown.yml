@@ -1,14 +1,8 @@
-book_filename: "cc"
-new_session: true
+book_filename: "finalproj"
+output_dir: docs
+delete_merged_file: true
 edit: https://github.com/Howard-HaoChang/Disaster_analysis/edit/main/%s
 view: https://github.com/Howard-HaoChang/Disaster_analysis/blob/main/%s
-before_chapter_script: _common.R
-delete_merged_file: true
 language:
   ui:
     chapter_name: "Chapter "
-
-rmd_files: [
-  # Part: Introduction
-  'index.Rmd', # must be first chapter
- ]
