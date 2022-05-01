@@ -1,3 +1,41 @@
 # Interactive component
+```{r, message=F, echo=F, warning=F}
+library(tidyverse) 
+library(maps)
+library(readxl)
+library(gganimate)
+library(gifski)
+library(plotly)
+library(countrycode)
+```
+
+```{r}
+disaster = read.csv('data/disaster.csv') %>%
+  select(-X)
+
+mapdata = map_data("world")
+```
+
+```{r}
+disaster_raw = disaster %>%
+  group_by(Year,Country) %>%
+  summarize(deaths = sum(Total.Deaths, na.rm = T),
+            damage = sum(Total.Damages, na.rm = T),
+            damageadj = sum(Total.Damages.Adjusted, na.rm = T)) %>%
+  unique()
+```
+
+```{r}
+country = sort(unique(mapdata$region))
+data = data.frame(Year = as.character(rep(seq(1900,2022), each = length(country))), Country = rep(country, 123))
+data$Year = as.numeric(data$Year)
+data1 = data %>% left_join(disaster_raw)
+data1[is.na(data1)] = 0
+
+rawdata = left_join(mapdata,data1,by=c("region" = "Country"))
+rawdata$Year = as.numeric(rawdata$Year)
+```
+
+
 
 
