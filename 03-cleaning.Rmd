@@ -5,7 +5,7 @@ library(tidyverse)
 library(countrycode)
 ```
 
-##Disaster Data
+## Disaster Data
 
 ```{r,results='hide', warning=FALSE, message=FALSE}
 #Loading disaster data and map message data
@@ -17,14 +17,14 @@ We want to add location information to disaster data for graphical visualization
 
 ### checking the country name
 
-```{r, echo=FALSE}
+```{r, eval=FALSE}
 #Apply the countryname function to standardize the countryname of each dataset
 countryname(unique(raw_data$Country))
 countryname(unique(latitude.longtitude.data$region))
 ```
 
 `Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :`
-  `Some values were not matched unambiguously: Azores Islands, Canary Is, Serbia Montenegro, Yemen P Dem Rep``
+  `Some values were not matched unambiguously: Azores Islands, Canary Is, Serbia Montenegro, Yemen P Dem Rep`
 
 `Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :`
   `Some values were not matched unambiguously: Ascension Island, Azores, Barbuda, Canary Islands, Chagos Archipelago, Grenadines, Heard Island, Madeira Islands, Micronesia, Saba, Saint Martin, Siachen Glacier, Sint Eustatius, Virgin Islands`
@@ -99,7 +99,7 @@ covid_df = covid_df %>% mutate("Total.Death" = as.numeric(Total.Death)) %>%
 
 In order to compare the data together, we also need to unify the country names of the data according to the corrected disaster data.
 
-```{r, results='hide'}
+```{r, eval=FALSE}
 #Apply the countryname function to standardize the countryname of dataset
 countryname(unique(covid_df$Country.Region))
 ```
@@ -124,11 +124,3 @@ covid_match <- covid_remove %>%
 GDP_temp = read.csv("data/world_bank_gdp.csv")
 GDP <- GDP_temp[,-c(1,2)]
 ```
-
-`Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :`
-  `Some values were not matched unambiguously: , Africa Eastern and Southern, Africa Western and Central, Arab World, Caribbean small states, Central Europe and the Baltics, Early-demographic dividend, East Asia & Pacific, East Asia & Pacific (excluding high income), East Asia & Pacific (IDA & IBRD countries), Euro area, Europe & Central Asia, Europe & Central Asia (excluding high income), Europe & Central Asia (IDA & IBRD countries), European Union, Fragile and conflict affected situations, Heavily indebted poor countries (HIPC), High income, IBRD only, IDA & IBRD total, IDA blend, IDA only, IDA total, Late-demographic dividend, Latin America & Caribbean, Latin America & Caribbean (excluding high income), Latin America & the Caribbean (IDA & IBRD countries), Least developed countries: UN classification, Low & middle income, Low income, Lower middle income, Middle East & North Africa, Middle East & North Africa (excluding high income), Middle East & North Africa (IDA & IBRD countries), Mi [... truncated]`
-  
-```{r}
-write.csv()
-```
-
