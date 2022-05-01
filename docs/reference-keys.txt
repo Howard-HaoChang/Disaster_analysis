@@ -8,3 +8,11 @@ missing-values
 results
 interactive-component
 conclusion
+read-gdp-data
+disaster-dataset
+by-row
+by-column
+by-value
+covid-dataset
+gdp-dataset
+for-countries

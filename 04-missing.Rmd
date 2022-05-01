@@ -47,7 +47,7 @@ It shows that the missing value has a increasing trend among all years because t
 
 ### By Column
 
-```{r, fig.width=20}
+```{r, fig.width=17}
 colSums(is.na(disaster)) %>%
   sort(decreasing = TRUE)
 
@@ -70,7 +70,11 @@ ggplot(tidydata, aes(x = key, y = fct_rev(id), fill = missing)) +
   scale_fill_viridis_d() + # discrete scale
   theme_bw()+
   scale_y_discrete(breaks = c())
+
+disaster[,c(10,11,12)][is.na(disaster[,c(10,11,12)])] = 0
+write.csv(disaster,'data/disaster.csv')
 ```
+
 It gives a look at the na for each value. However I don't think that there is a relation between the nas in different variable.
 
 
