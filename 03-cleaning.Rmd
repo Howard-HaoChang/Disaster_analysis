@@ -72,7 +72,7 @@ data_remove$Country[data_remove$Country == "Tokelau"] <- "New Zealand"
 
 # adding a column called "countryname" to be the standard country names, and when mismatch then the country must be one of our adjusted countries, so just keep it as it is.
 disaster_match <- data_remove %>%
-  mutate(country.name = ifelse(is.na(countryname(data_remove$Country)),data_remove$Country,countryname(data_remove$Country)))
+  mutate(Country = ifelse(is.na(countryname(data_remove$Country)),data_remove$Country,countryname(data_remove$Country)))
 
 #The data frame has a total of 50 variables, but we won't use all of them, so we need to tidy the data.
 disaster <- disaster_match %>%
@@ -119,8 +119,25 @@ covid_match <- covid_remove %>%
   mutate(country.name = ifelse(is.na(countryname(covid_remove$Country.Region)),covid_remove$Country.Region,countryname(covid_remove$Country.Region)))
 ```
 
-## GDP 
+## GDP time series data
+
+
 ```{r}
+#Loading the GDP raw data
 GDP_temp = read.csv("data/world_bank_gdp.csv")
 GDP <- GDP_temp[,-c(1,2)]
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
