@@ -16,3 +16,5 @@ by-value
 covid-dataset
 gdp-dataset
 for-countries
+covid-data-1
+for-year

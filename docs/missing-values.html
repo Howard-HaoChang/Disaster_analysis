@@ -147,7 +147,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-gdp-data"><i class="fa fa-check"></i><b>3.1</b> Read GDP data</a></li>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#covid-data-1"><i class="fa fa-check"></i><b>3.1</b> Covid Data</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
@@ -161,6 +161,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.3" data-path="missing-values.html"><a href="missing-values.html#gdp-dataset"><i class="fa fa-check"></i><b>4.3</b> GDP Dataset</a>
 <ul>
 <li class="chapter" data-level="4.3.1" data-path="missing-values.html"><a href="missing-values.html#for-countries"><i class="fa fa-check"></i><b>4.3.1</b> For countries</a></li>
+<li class="chapter" data-level="4.3.2" data-path="missing-values.html"><a href="missing-values.html#for-year"><i class="fa fa-check"></i><b>4.3.2</b> For Year</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
@@ -228,7 +229,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##                    ISO                 Region              Continent 
 ##                      0                      0                      0</code></pre>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="missing-values.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing</span>(disaster, <span class="at">percent =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-5-1.png" width="1920" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-5-1.png" width="1632" /></p>
 <p>It shows that damage and adj.damage gets the most nas, then deaths and subtype.</p>
 </div>
 <div id="by-value" class="section level3 hasAnchor" number="4.1.3">
@@ -244,8 +245,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-9"><a href="missing-values.html#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>() <span class="sc">+</span> <span class="co"># discrete scale</span></span>
 <span id="cb8-10"><a href="missing-values.html#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
 <span id="cb8-11"><a href="missing-values.html#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">breaks =</span> <span class="fu">c</span>())</span></code></pre></div>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-6-1.png" width="672" />
-It gives a look at the na for each value. However I don’t think that there is a relation between the nas in different variable.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>It gives a look at the na for each value. However I don’t think that there is a relation between the nas in different variable.</p>
 </div>
 </div>
 <div id="covid-dataset" class="section level2 hasAnchor" number="4.2">
@@ -262,6 +263,32 @@ It gives a look at the na for each value. However I don’t think that there is 
 <p>This is a time series data from 1960 to 2020 for the countries around the world, we want to check the na for each countries and for each Year.</p>
 <div id="for-countries" class="section level3 hasAnchor" number="4.3.1">
 <h3><span class="header-section-number">4.3.1</span> For countries<a href="missing-values.html#for-countries" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We want to see how many NA are there for each country</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="missing-values.html#cb13-1" aria-hidden="true" tabindex="-1"></a>missing <span class="ot">=</span> <span class="fu">cbind</span>(GDP[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">NAs =</span> <span class="fu">rowSums</span>(<span class="fu">matrix</span>(<span class="fu">as.numeric</span>(<span class="fu">is.na</span>(GDP[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)])), <span class="at">nrow =</span> <span class="fu">nrow</span>(GDP)))) <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="missing-values.html#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(NAs))</span>
+<span id="cb13-3"><a href="missing-values.html#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="missing-values.html#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(missing, <span class="dv">10</span>)</span></code></pre></div>
+<pre><code>##                 Country.Name Country.Code NAs
+## 1     British Virgin Islands          VGB  61
+## 2                  Gibraltar          GIB  61
+## 3  Korea, Dem. People&#39;s Rep.          PRK  61
+## 4   St. Martin (French part)          MAF  61
+## 5  Sint Maarten (Dutch part)          SXM  53
+## 6                South Sudan          SSD  53
+## 7            Channel Islands          CHI  51
+## 8                    Curacao          CUW  51
+## 9                      Nauru          NRU  50
+## 10                    Kosovo          XKX  48</code></pre>
+<p>As we can see, the missing value are tend to appear on those small countries where data are hard to collect.</p>
+</div>
+<div id="for-year" class="section level3 hasAnchor" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> For Year<a href="missing-values.html#for-year" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now we want to know the missing value among time</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="missing-values.html#cb15-1" aria-hidden="true" tabindex="-1"></a>missing <span class="ot">=</span> <span class="fu">cbind</span>(<span class="at">Year =</span> <span class="dv">1960</span><span class="sc">:</span><span class="dv">2020</span>, <span class="at">NAs =</span> <span class="fu">colSums</span>(<span class="fu">matrix</span>(<span class="fu">as.numeric</span>(<span class="fu">is.na</span>(GDP[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)])), <span class="at">nrow =</span> <span class="fu">nrow</span>(GDP))))</span>
+<span id="cb15-2"><a href="missing-values.html#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="missing-values.html#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(missing, <span class="at">main =</span> <span class="st">&#39;Missing values among year&#39;</span>)</span></code></pre></div>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Here as we can see, the missing values are reducing with the year increase. That’s because with the development of the technology, we have more and easier access to collect the data.</p>
 
 </div>
 </div>
