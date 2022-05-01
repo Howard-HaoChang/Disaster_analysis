@@ -7,7 +7,7 @@ library(countrycode)
 
 ##Disaster Data
 
-```{r,, warning=FALSE, message=FALSE}
+```{r,results='hide', warning=FALSE, message=FALSE}
 #Loading disaster data and map message data
 raw_data <- readxl::read_xlsx("data/emdat_public_2022_04_30_full.xlsx")
 latitude.longtitude.data <- map_data("world")
@@ -17,7 +17,7 @@ We want to add location information to disaster data for graphical visualization
 
 ### checking the country name
 
-```{r, results='hide'}
+```{r, echo=FALSE}
 #Apply the countryname function to standardize the countryname of each dataset
 countryname(unique(raw_data$Country))
 countryname(unique(latitude.longtitude.data$region))
@@ -75,7 +75,6 @@ disaster_match <- data_remove %>%
   mutate(country.name = ifelse(is.na(countryname(data_remove$Country)),data_remove$Country,countryname(data_remove$Country)))
 
 #The data frame has a total of 50 variables, but we won't use all of them, so we need to tidy the data.
-names(disaster_match)
 disaster <- disaster_match %>%
   select("Year","Disaster Group","Disaster Subgroup","Disaster Type","Disaster Subtype","Country","ISO","Region",
          "Continent","Total Deaths","Total Damages ('000 US$)","Total Damages, Adjusted ('000 US$)")
