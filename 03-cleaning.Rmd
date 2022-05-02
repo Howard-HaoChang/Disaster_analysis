@@ -8,7 +8,7 @@ library(countrycode)
 ## Disaster Data
 
 ```{r,results='hide', warning=FALSE, message=FALSE}
-#Loading disaster data and map message data
+# Load disaster data and map message data
 raw_data <- readxl::read_xlsx("data/emdat_public_2022_04_30_full.xlsx")
 latitude.longtitude.data <- map_data("world")
 ```
@@ -18,7 +18,7 @@ We want to add location information to disaster data for graphical visualization
 ### checking the country name
 
 ```{r, eval=FALSE}
-#Apply the countryname function to standardize the countryname of each dataset
+# Apply the countryname function to standardize the countryname of each dataset
 countryname(unique(raw_data$Country))
 countryname(unique(latitude.longtitude.data$region))
 ```
@@ -70,7 +70,7 @@ data_remove$Country[data_remove$Country == "Saint Martin (French Part)"] <- "Sai
 # "Tokelau" is belong to "New Zealand"
 data_remove$Country[data_remove$Country == "Tokelau"] <- "New Zealand"
 
-# adding a column called "countryname" to be the standard country names, and when mismatch then the country must be one of our adjusted countries, so just keep it as it is.
+# Replace the column "Country" with the standard country names, and when mismatch then the country must be one of our adjusted countries, so just keep it as it is.
 disaster_match <- data_remove %>%
   mutate(Country = ifelse(is.na(countryname(data_remove$Country)),data_remove$Country,countryname(data_remove$Country)))
 
@@ -103,33 +103,64 @@ In order to compare the data together, we also need to unify the country names o
 #Apply the countryname function to standardize the countryname of dataset
 countryname(unique(covid_df$Country.Region))
 ```
+
 `Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :`
   `Some values were not matched unambiguously: Diamond Princess, Micronesia, MS Zaandam, Summer Olympics 2020, Winter Olympics 2022`
   
 ```{r}
-#remove Summer Olympics 2020 & Winter Olympics 2022,Micronesia
+# remove Summer Olympics 2020 & Winter Olympics 2022,Micronesia
 covid_remove <- covid_df[-which(covid_df$Country.Region %in% c("Summer Olympics 2020", "Winter Olympics 2022", "Micronesia")),]
-#Diamond Princess - Japan
+# Diamond Princess is a Japanese cruise ship, so it counts as Japan
 covid_remove$Country.Region[covid_remove$Country.Region == "Diamond Princess"] <- "Japan"
-#MS Zaandam - Netherlands
+# MS Zaandam is a Netherlands cruise ship, so it counts as Netherlands
 covid_remove$Country.Region[covid_remove$Country.Region == "MS Zaandam"] <- "Netherlands"
 
-# adding a column called "countryname" to be the standard country names, and when mismatch then the country must be one of our adjusted countries, so just keep it as it is.
+# adding a column called "country.name" to be the standard country names, and when mismatch then the country must be one of our adjusted countries, so just keep it as it is.
 covid_match <- covid_remove %>%
   mutate(country.name = ifelse(is.na(countryname(covid_remove$Country.Region)),covid_remove$Country.Region,countryname(covid_remove$Country.Region)))
 ```
 
 ## GDP time series data
 
-
-```{r}
-#Loading the GDP raw data
+```{r,eval=FALSE}
+# Load the GDP raw data
 GDP_temp = read.csv("data/world_bank_gdp.csv")
-GDP <- GDP_temp[,-c(1,2)]
 ```
 
+The country name of this data set contains two parts, which is the names of difference countries and different regions. We only consider about the time series data of the country so we delete the country name of different regions. Also, the name of time series variables is not beautiful so we also change the variable name that makes it look more properly.
 
+```{r,eval=FALSE}
+# We only need the country name, country code and time series data
+GDP <- GDP_temp[c(1:which(GDP$Country.Name == "Zimbabwe")),-c(1,2)]
+```
 
+The missing value of this data is not represented by NULL or NA, but by "..". This is not convenient for our subsequent data reference and processing, so we directly use Excel to convert all ".." into NULL.
+
+```{r,results='hide', warning=FALSE, message=FALSE}
+# Load the GDP with missing value expressed by NULL
+GDP = read.csv("data/GDP.csv")
+```
+
+We want to add a location information to this data so we need to unify the country names.
+
+```{r}
+GDP <- GDP %>%
+  mutate(Country.Name = ifelse(is.na(countryname(GDP$Country.Name)),GDP$Country.Name,countryname(GDP$Country.Name)))
+```
+
+## latitude longtitude data
+
+Although the country name of this data is sufficiently standardized, in order for all the data to match each other, we also need to modify the country name.
+
+```{r,results='hide', warning=FALSE, message=FALSE}
+# Load the data
+latitude.longtitude.data <- map_data("world")
+
+# # adding a column called "Country" to be the standard country names, and when mismatch then the country must be one of our adjusted countries, so just keep it as it is.
+map_match <- latitude.longtitude.data %>%
+  mutate(Country = ifelse(is.na(countryname(latitude.longtitude.data$region)),latitude.longtitude.data$region,countryname(latitude.longtitude.data$region))) %>% 
+  select(long,lat,group,order,Country,subregion)
+```
 
 
 
