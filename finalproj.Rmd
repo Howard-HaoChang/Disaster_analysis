@@ -7,6 +7,15 @@ author:
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
+--- 
+title: "Disaster Analysis"
+author: 
+  - Jiachen Liu
+  - Hao Chang
+  - Yihui Xie
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
 
 # Introduction
 
@@ -22,337 +31,46 @@ Also, as we want to know more about the pattern of Covid-19, for we can know abo
 
 <!--chapter:end:index.Rmd-->
 
+
 # Data sources
 
-```{r,echo=FALSE, message=FALSE, results='hide', warning=F}
-library(tidyverse)
-COVID = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
-GDP = read.csv("data/world_bank_gdp.csv")
-Disaster <- readxl::read_xlsx("data/disaster data.xlsx")
-```
+Placeholder
+
 
 ## Disester Data
-
-Our disaster Data is coming from [The International Disaster Data Center for research on the Epidemiology of Disaster](https://public.emdat.be/data). We downloaded the dataset with default setting. The web page is as shown below:
-
-![International Disaster Data Center Website](docs/disaster_web_Image.png)
-
-EM-DAT contains essential core data on the occurrence and effects of over 22,000 mass disasters worldwide from 1900 to the present day.
-
-The source of the dataset is described as below, and hence high credibility.
-> The database is compiled from various sources including UN, governmental and non-governmental agencies, insurance companies, research institutes and press agencies. As there can be conflicting information and figures, CRED has established a method of ranking these sources according to their ability to provide trustworthy and complete data. In the majority of cases, a disaster will only be entered into EM-DAT if at least two sources report the disaster's occurrence in terms of deaths and/or affected persons.
-
-```{r}
-sprintf('The row number of disaster dataset is %.0f, and the column number is %.0f.', dim(Disaster)[1], dim(Disaster)[2])
-```
-```{r}
-# The Names including
-print(colnames(Disaster))
-```
-
 ## COVID Data
-
-Our COVID data is from a [repository](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series) from Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE). We used only the deaths number and read the data directly from the repo.
-
-![COVID Data Center Website](docs/covid_web_Image.png)
-The dataset also supported by the ESRI Living Atlas Team and the Johns Hopkins University Applied Physics Lab (JHU APL), and subject is read in from the daily case report. The time series tables are subject to be updated if inaccuracies are identified in our historical data.
-
-```{r}
-sprintf('The row number of covid dataset is %.0f, and the column number is %.0f.', dim(COVID)[1], dim(COVID)[2])
-```
-
-```{r}
-# The Names including
-print(colnames(COVID)[1:20])
-# And all the later columns are time series data up to now.
-```
-
 ## GDP Data
-
-Our GDP data is downloaded from [The World Bank](https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators). We used the world development indicators database, which is the primary World Bank collection of development indicators, compiled from officially recognized international sources. And it presents the most current and accurate global development data available, and includes national, regional and global estimates.
-
-![COVID Data Center Website](docs/gdp_web_Image.png)
-As shown above, we include all Countries and Time(Years) available, and GDP is what we need.
-
-```{r}
-sprintf('The row number of GDP dataset is %.0f, and the column number is %.0f.', dim(GDP)[1], dim(GDP)[2])
-```
-
-```{r}
-# The Names including
-print(colnames(GDP)[1:20])
-# And all the later columns are time series data up to now.
-```
-
-
 
 <!--chapter:end:02-data.Rmd-->
 
+
 # Data transformation
 
-```{r,echo=FALSE, message=FALSE, results='hide'}
-library(tidyverse)
-library(countrycode)
-```
+Placeholder
+
 
 ## Disaster Data
-
-```{r,results='hide', warning=FALSE, message=FALSE}
-#Loading disaster data and map message data
-raw_data <- readxl::read_xlsx("data/emdat_public_2022_04_30_full.xlsx")
-latitude.longtitude.data <- map_data("world")
-```
-
-We want to add location information to disaster data for graphical visualization. However, due to the large time span of our data, some countries have experienced splitting or merging in this 100-year period, so in order to ensure that our data can be merged with the data of geographic information through the country name, we need to clean our countries' names first before doing the merge.
-
 ### checking the country name
-
-```{r, eval=FALSE}
-#Apply the countryname function to standardize the countryname of each dataset
-countryname(unique(raw_data$Country))
-countryname(unique(latitude.longtitude.data$region))
-```
-
-`Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :`
-  `Some values were not matched unambiguously: Azores Islands, Canary Is, Serbia Montenegro, Yemen P Dem Rep`
-
-`Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :`
-  `Some values were not matched unambiguously: Ascension Island, Azores, Barbuda, Canary Islands, Chagos Archipelago, Grenadines, Heard Island, Madeira Islands, Micronesia, Saba, Saint Martin, Siachen Glacier, Sint Eustatius, Virgin Islands`
-
-There are several reasons for mismatching:  
-
-* First situation, the countries are too small to be included in the package.(e.g. "Tuvalu", "Micronesia (Federated States of)")
-* Second situation, the countries are no longer exist since our data contains data from 1900. (e.g. "Serbia Montenegro", "Yemen P Dem Rep")
-  + "Yemen P Dem Rep" merged with "Yemen Arab Rep" in 1990 and is called "Yemen" now.
-* Third situation, this does not show up here, but we need to consider the situation that some of the countries disintegrated during the past 122 years. (e.g. "Czechoslovakia", "Yugoslavia") In this situation, we may need to change the data of one country into several. 
-  + "Serbia Montenegro" split into two countries called "Serbia" and "Montengro" in 2006. 
-  + "Yugoslavia" had split into six countries,"Slovenia","Croatia", "Serbia", "Montengro", "Bosnia and Herzegovina" and "Macedonia". 
-  + "Czechoslovakia" had split into two countries, "Czech Republic" and "Slovakia", in 1993.
-
 ### Manual Adjustments
-
-Based on the above three situation, we did some manual adjustment(splitting) on our data, and reread in the data.   
-Our splited countries are："Czechoslovakia"， "Yugoslavia"，and “Serbia Montenegro”.
-
-```{r, warning=FALSE, message=FALSE}
-# data after splitting certain countries
-data_temp <- readxl::read_xlsx("data/disaster data.xlsx") 
-
-# some manual adjustments
-
-# delete "Micronesia (Federated States of)" and "Tuvalu", which does not included in the existing data, hence do not have latitude and longitude information.
-data_remove <- data_temp[-which(data_temp$Country %in% c("Micronesia (Federated States of)","Tuvalu")),]
-# manual match some small contries: Azores Islands - Azores; Canary Is - Canary Islands
-data_remove$Country[data_remove$Country == "Azores Islands"] <- "Azores"
-data_remove$Country[data_remove$Country == "Canary Is"] <- "Canary Islands"
-# merge "Yemen P Dem Rep" and "Yemen Arab Rep"
-data_remove$Country[data_remove$Country %in% c("Yemen P Dem Rep","Yemen Arab Rep")] <- "Yemen"
-# Virgin Islands are one area in existing data, so merge together: Virgin Island (British) & Virgin Island (U.S.) - Virgin Islands
-data_remove$Country[data_remove$Country == "Virgin Island (British)"] <- "Virgin Islands"
-data_remove$Country[data_remove$Country == "Virgin Island (U.S.)"] <- "Virgin Islands"
-# "Hong Kong" and "Macao" belong to China now
-data_remove$Country[data_remove$Country == "Hong Kong"] <- "China"
-data_remove$Country[data_remove$Country == "Macao"] <- "China"
-# "Netherlands Antilles" belongs to "Caribbean Netherlands", but does not have independent geographic information, so including it in "Netherlands"
-data_remove$Country[data_remove$Country == "Netherlands Antilles"] <- "Netherlands"
-# same situation, including "Saint Martin (French part)" in "Saint Martin"
-data_remove$Country[data_remove$Country == "Saint Martin (French Part)"] <- "Saint Martin"
-# "Tokelau" is belong to "New Zealand"
-data_remove$Country[data_remove$Country == "Tokelau"] <- "New Zealand"
-
-# adding a column called "countryname" to be the standard country names, and when mismatch then the country must be one of our adjusted countries, so just keep it as it is.
-disaster_match <- data_remove %>%
-  mutate(Country = ifelse(is.na(countryname(data_remove$Country)),data_remove$Country,countryname(data_remove$Country)))
-
-#The data frame has a total of 50 variables, but we won't use all of them, so we need to tidy the data.
-disaster <- disaster_match %>%
-  select("Year","Disaster Group","Disaster Subgroup","Disaster Type","Disaster Subtype","Country","ISO","Region",
-         "Continent","Total Deaths","Total Damages ('000 US$)","Total Damages, Adjusted ('000 US$)")
-
-colnames(disaster) <- c("Year","Disaster Group","Disaster Subgroup","Disaster Type","Disaster Subtype","Country","ISO","Region","Continent","Total Deaths","Total Damages","Total Damages Adjusted")
-```
-
 ## Covid Data
-
-The number of deaths in this data is refreshed daily in the last column and is cumulative so we only need to keep the last column for the number of deaths in each country. Because some countries count the number of deaths according to different cities, we need to add up the number of deaths in different cities in each country and combine them into the total number of deaths in a country.
-
-```{r}
-#Loading covid data
-df_covid_raw = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
-covid_df = df_covid_raw %>% select(ncol(df_covid_raw)) 
-covid_df = cbind("Country.Region" = df_covid_raw$Country.Region, 
-                 "Total.Death" = rowSums(covid_df)) %>% data.frame()
-covid_df = covid_df %>% mutate("Total.Death" = as.numeric(Total.Death)) %>% 
-  group_by(Country.Region) %>% 
-  summarise("Total.Death" = sum(Total.Death, na.rm = T))
-```
-
-In order to compare the data together, we also need to unify the country names of the data according to the corrected disaster data.
-
-```{r, eval=FALSE}
-#Apply the countryname function to standardize the countryname of dataset
-countryname(unique(covid_df$Country.Region))
-```
-`Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :`
-  `Some values were not matched unambiguously: Diamond Princess, Micronesia, MS Zaandam, Summer Olympics 2020, Winter Olympics 2022`
-  
-```{r}
-#remove Summer Olympics 2020 & Winter Olympics 2022,Micronesia
-covid_remove <- covid_df[-which(covid_df$Country.Region %in% c("Summer Olympics 2020", "Winter Olympics 2022", "Micronesia")),]
-#Diamond Princess - Japan
-covid_remove$Country.Region[covid_remove$Country.Region == "Diamond Princess"] <- "Japan"
-#MS Zaandam - Netherlands
-covid_remove$Country.Region[covid_remove$Country.Region == "MS Zaandam"] <- "Netherlands"
-
-# adding a column called "countryname" to be the standard country names, and when mismatch then the country must be one of our adjusted countries, so just keep it as it is.
-covid_match <- covid_remove %>%
-  mutate(country.name = ifelse(is.na(countryname(covid_remove$Country.Region)),covid_remove$Country.Region,countryname(covid_remove$Country.Region)))
-```
-
 ## GDP time series data
-
-
-```{r}
-#Loading the GDP raw data
-GDP_temp = read.csv("data/world_bank_gdp.csv")
-GDP <- GDP_temp[,-c(1,2)]
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <!--chapter:end:03-cleaning.Rmd-->
 
+
 # Missing values
 
-```{r, message=F, echo=F, warning=F}
-library(readxl)
-library(redav)
-library(tidyverse)
-library(mi)
-library(sf)
-library(tmap)
-library(zoo)
-```
+Placeholder
 
 
 ## Disaster dataset
-
-```{r}
-disaster = read.csv("data/disaster_missing.csv") %>%
-  select(-X)
-```
-
-
 ### By row
-
-```{r}
-rowSums(is.na(disaster)) %>%
-  sort(decreasing = TRUE) %>%
-  table()
-```
-It shows that the missing value numbers with different rows. There are for 3555 rows with no missing values, 1748 rows with 1 missing values, 14669 rows with 2 missing values, 4781 rows with 3 missing values and 742 rows with 4 missing values.
-
-Also we want to visualize it by year.
-```{r}
-missing <- disaster %>% 
-    group_by(Year) %>% 
-    summarise(sum.na = sum(is.na(Total.Deaths)+is.na(Total.Damages)+is.na(Disaster.Subtype)+is.na(Total.Damages.Adjusted)))
-
-ggplot(missing, aes(x = Year, y = sum.na)) +
-  geom_col(color = "blue", fill = "lightblue") +
-  ggtitle("Number of missing values by Year") +
-  xlab("") +
-  ylab("Number of missing station values(All Variables)") +
-  theme(axis.text.x = element_text(angle = 45)) +
-  scale_x_discrete(breaks = c('1900','1910','1920','1930','1940','1950','1960','1970','1980','1990','2000','2010','2020'))
-```
-
-It shows that the missing value has a increasing trend among all years because the data records are increasing over year.
-
 ### By Column
-
-```{r, fig.width=17}
-colSums(is.na(disaster)) %>%
-  sort(decreasing = TRUE)
-
-plot_missing(disaster, percent = FALSE)
-```
-
-It shows that damage and adj.damage gets the most nas, then deaths and subtype.
-
 ### By Value
-
-```{r}
-tidydata <- disaster %>% 
-    rownames_to_column("id") %>% 
-    gather(key, value, -id) %>% 
-    mutate(missing = ifelse(is.na(value), "yes", "no"))
-
-ggplot(tidydata, aes(x = key, y = fct_rev(id), fill = missing)) +
-  geom_tile() + 
-  ggtitle("ourdata with NAs") +
-  scale_fill_viridis_d() + # discrete scale
-  theme_bw()+
-  scale_y_discrete(breaks = c())
-```
-
-It gives a look at the na for each value. However I don't think that there is a relation between the nas in different variable.
-
-
 ## Covid Dataset
-
-```{r}
-covid = read.csv("data/covid.csv") %>%
-  select(-X)
-```
-
-```{r}
-sum(is.na(covid))
-```
-
-There is no NA value in this data set.
-
 ## GDP Dataset
-```{r}
-GDP = read.csv("data/GDP.csv")
-```
-
-This is a time series data from 1960 to 2020 for the countries around the world, we want to check the na for each countries and for each Year.
-
 ### For countries
-We want to see how many NA are there for each country
-```{r}
-missing = cbind(GDP[,1:2], NAs = rowSums(matrix(as.numeric(is.na(GDP[,-c(1,2)])), nrow = nrow(GDP)))) %>%
-  arrange(desc(NAs))
-
-head(missing, 10)
-```
-
-As we can see, the missing value are tend to appear on those small countries where data are hard to collect.
-
 ### For Year
-Now we want to know the missing value among time
-```{r}
-missing = cbind(Year = 1960:2020, NAs = colSums(matrix(as.numeric(is.na(GDP[,-c(1,2)])), nrow = nrow(GDP))))
-
-plot(missing, main = 'Missing values among year')
-```
-
-Here as we can see, the missing values are reducing with the year increase. That's because with the development of the technology, we have more and easier access to collect the data.
-
-
 
 <!--chapter:end:04-missing.Rmd-->
 
@@ -361,43 +79,10 @@ Here as we can see, the missing values are reducing with the year increase. That
 <!--chapter:end:05-results.Rmd-->
 
 # Interactive component
-```{r, message=F, echo=F, warning=F}
-library(tidyverse) 
-library(maps)
-library(readxl)
-library(gganimate)
-library(gifski)
-library(plotly)
-library(countrycode)
+```{r, message=FALSE}
+library(shiny)
+runApp('App.R')
 ```
-
-```{r}
-disaster = read.csv('data/disaster.csv') %>%
-  select(-X)
-
-mapdata = map_data("world")
-```
-
-```{r}
-disaster_raw = disaster %>%
-  group_by(Year,Country) %>%
-  summarize(deaths = sum(Total.Deaths, na.rm = T),
-            damage = sum(Total.Damages, na.rm = T),
-            damageadj = sum(Total.Damages.Adjusted, na.rm = T)) %>%
-  unique()
-```
-
-```{r}
-country = sort(unique(mapdata$region))
-data = data.frame(Year = as.character(rep(seq(1900,2022), each = length(country))), Country = rep(country, 123))
-data$Year = as.numeric(data$Year)
-data1 = data %>% left_join(disaster_raw)
-data1[is.na(data1)] = 0
-
-rawdata = left_join(mapdata,data1,by=c("region" = "Country"))
-rawdata$Year = as.numeric(rawdata$Year)
-```
-
 
 
 

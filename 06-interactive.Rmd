@@ -36,6 +36,18 @@ rawdata = left_join(mapdata,data1,by=c("region" = "Country"))
 rawdata$Year = as.numeric(rawdata$Year)
 ```
 
+```{r}
+g2 = ggplot(rawdata, aes(x = long, y = lat, group = group))+ 
+  # the same as the setting with summary plot
+  geom_polygon(aes(fill = log10(deaths)), color = 'black')+
+  transition_manual(frames = Year) +
+  # use year as the animation parameter
+  scale_fill_gradient(low = '#FFF68F',high = '#FC4902') +
+  labs(title = paste('Year:','{current_frame}')) +
+  # make the title changes among different plot
+  ggdark::dark_theme_bw()
 
+animate(g2,fps = 3)
+```
 
 
