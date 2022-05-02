@@ -21,14 +21,14 @@ disaster_raw = disaster %>%
     unique()
 
 # generate the plot data
-country = sort(unique(mapdata$region))
+country = sort(unique(mapdata$Country))
 data = data.frame(Year = rep(seq(1900,2022), each = length(country)), Country = rep(country, 123))
 data1 = data %>% left_join(disaster_raw)
 data1[is.na(data1)] = 0
 data2 = data1 %>% left_join(GDP, by = c('Year'='year', 'Country'='Country.Name'))
 
 # join the region and country
-rawdata = left_join(mapdata,data2,by=c("region" = "Country"))
+rawdata = left_join(mapdata,data2,by=c("Country" = "Country"))
 rawdata$Year = as.numeric(rawdata$Year)
 
 # Define UI for application that draws a histogram
@@ -42,7 +42,7 @@ ui <- fluidPage('The Display of Geographical disaster data',
         sidebarPanel(h3('user input'),
             radioButtons(inputId = 'Variable',
                      label = 'Variable', 
-                     choices = c('GDP','Damage','Adjusted Damage','Deaths','Covid'),
+                     choices = c('GDP','Damage','Adjusted Damage','Deaths'),
                      inline = T),
             sliderInput("Year",
                     "Year:",
@@ -66,7 +66,7 @@ server <- function(input, output) {
     output$distPlot <- renderPlotly({
         # generate the ggplot
         if(input$Variable == 'GDP'){
-            g = ggplot(df(), aes(x = long, y = lat, group = group, text = region))+ 
+            g = ggplot(df(), aes(x = long, y = lat, group = group, text = Country))+ 
                 # take longitude and latitude as x and y, a certain region as a group
                 geom_polygon(data = df(), aes(fill = log10(gdp)), color = 'black')+
                 # draw a map filled by log10(deaths), and separate each country by black lines
@@ -76,7 +76,7 @@ server <- function(input, output) {
                 # rename the plot
                 ggdark::dark_theme_bw() 
         } else if(input$Variable == 'Damage'){
-            g = ggplot(df(), aes(x = long, y = lat, group = group, text = region))+ 
+            g = ggplot(df(), aes(x = long, y = lat, group = group, text = Country))+ 
                 # take longitude and latitude as x and y, a certain region as a group
                 geom_polygon(data = df(), aes(fill = log10(damage)), color = 'black')+
                 # draw a map filled by log10(deaths), and separate each country by black lines
@@ -86,7 +86,7 @@ server <- function(input, output) {
                 # rename the plot
                 ggdark::dark_theme_bw()
         } else if(input$Variable == 'Adjusted Damage'){
-            g = ggplot(df(), aes(x = long, y = lat, group = group, text = region))+ 
+            g = ggplot(df(), aes(x = long, y = lat, group = group, text = Country))+ 
                 # take longitude and latitude as x and y, a certain region as a group
                 geom_polygon(data = df(), aes(fill = log10(damageadj)), color = 'black')+
                 # draw a map filled by log10(deaths), and separate each country by black lines
@@ -96,7 +96,7 @@ server <- function(input, output) {
                 # rename the plot
                 ggdark::dark_theme_bw() 
         } else if(input$Variable == 'Deaths'){
-            g = ggplot(df(), aes(x = long, y = lat, group = group, text = region))+ 
+            g = ggplot(df(), aes(x = long, y = lat, group = group, text = Country))+ 
                 # take longitude and latitude as x and y, a certain region as a group
                 geom_polygon(data = df(), aes(fill = log10(deaths)), color = 'black')+
                 # draw a map filled by log10(deaths), and separate each country by black lines
