@@ -5,7 +5,8 @@ library(plotly)
 # read the disaster data and the map data
 disaster = read.csv('data/disaster.csv') %>%
     select(-X)
-mapdata = map_data("world")
+mapdata = read.csv('data/Location.csv') %>%
+    select(-X)
 GDP = read.csv('data/GDP.csv') %>%
     select(-X) %>%
     pivot_longer(cols = X1960:X2020, values_to = 'gdp', names_to = 'year') %>%

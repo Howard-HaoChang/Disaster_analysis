@@ -13,7 +13,8 @@ library(countrycode)
 disaster = read.csv('data/disaster.csv') %>%
   select(-X)
 
-mapdata = map_data("world")
+mapdata = read.csv('data/Location.csv') %>%
+  select(-X)
 ```
 
 ```{r}
@@ -26,13 +27,13 @@ disaster_raw = disaster %>%
 ```
 
 ```{r}
-country = sort(unique(mapdata$region))
+country = sort(unique(mapdata$Country))
 data = data.frame(Year = as.character(rep(seq(1900,2022), each = length(country))), Country = rep(country, 123))
 data$Year = as.numeric(data$Year)
 data1 = data %>% left_join(disaster_raw)
 data1[is.na(data1)] = 0
 
-rawdata = left_join(mapdata,data1,by=c("region" = "Country"))
+rawdata = left_join(mapdata,data1,by=c("Country" = "Country"))
 rawdata$Year = as.numeric(rawdata$Year)
 ```
 

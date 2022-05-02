@@ -25,7 +25,7 @@
 <meta name="author" content="Yihui Xie" />
 
 
-<meta name="date" content="2022-05-01" />
+<meta name="date" content="2022-05-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -154,6 +154,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#covid-data-1"><i class="fa fa-check"></i><b>3.2</b> Covid Data</a></li>
 <li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#gdp-time-series-data"><i class="fa fa-check"></i><b>3.3</b> GDP time series data</a></li>
+<li class="chapter" data-level="3.4" data-path="data-transformation.html"><a href="data-transformation.html#latitude-longtitude-data"><i class="fa fa-check"></i><b>3.4</b> latitude longtitude data</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
@@ -194,6 +195,53 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="interactive-component" class="section level1 hasAnchor" number="6">
 <h1><span class="header-section-number">Chapter 6</span> Interactive component<a href="interactive-component.html#interactive-component" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="interactive-component.html#cb45-1" aria-hidden="true" tabindex="-1"></a>disaster <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">&#39;data/disaster.csv&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb45-2"><a href="interactive-component.html#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>X)</span>
+<span id="cb45-3"><a href="interactive-component.html#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="interactive-component.html#cb45-4" aria-hidden="true" tabindex="-1"></a>mapdata <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">&#39;data/Location.csv&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb45-5"><a href="interactive-component.html#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>X)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="interactive-component.html#cb46-1" aria-hidden="true" tabindex="-1"></a>disaster_raw <span class="ot">=</span> disaster <span class="sc">%&gt;%</span></span>
+<span id="cb46-2"><a href="interactive-component.html#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year,Country) <span class="sc">%&gt;%</span></span>
+<span id="cb46-3"><a href="interactive-component.html#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">deaths =</span> <span class="fu">sum</span>(Total.Deaths, <span class="at">na.rm =</span> T),</span>
+<span id="cb46-4"><a href="interactive-component.html#cb46-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">damage =</span> <span class="fu">sum</span>(Total.Damages, <span class="at">na.rm =</span> T),</span>
+<span id="cb46-5"><a href="interactive-component.html#cb46-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">damageadj =</span> <span class="fu">sum</span>(Total.Damages.Adjusted, <span class="at">na.rm =</span> T)) <span class="sc">%&gt;%</span></span>
+<span id="cb46-6"><a href="interactive-component.html#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;Year&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="interactive-component.html#cb48-1" aria-hidden="true" tabindex="-1"></a>country <span class="ot">=</span> <span class="fu">sort</span>(<span class="fu">unique</span>(mapdata<span class="sc">$</span>Country))</span>
+<span id="cb48-2"><a href="interactive-component.html#cb48-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Year =</span> <span class="fu">as.character</span>(<span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">1900</span>,<span class="dv">2022</span>), <span class="at">each =</span> <span class="fu">length</span>(country))), <span class="at">Country =</span> <span class="fu">rep</span>(country, <span class="dv">123</span>))</span>
+<span id="cb48-3"><a href="interactive-component.html#cb48-3" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Year <span class="ot">=</span> <span class="fu">as.numeric</span>(data<span class="sc">$</span>Year)</span>
+<span id="cb48-4"><a href="interactive-component.html#cb48-4" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">=</span> data <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(disaster_raw)</span></code></pre></div>
+<pre><code>## Joining, by = c(&quot;Year&quot;, &quot;Country&quot;)</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="interactive-component.html#cb50-1" aria-hidden="true" tabindex="-1"></a>data1[<span class="fu">is.na</span>(data1)] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb50-2"><a href="interactive-component.html#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="interactive-component.html#cb50-3" aria-hidden="true" tabindex="-1"></a>rawdata <span class="ot">=</span> <span class="fu">left_join</span>(mapdata,data1,<span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;Country&quot;</span> <span class="ot">=</span> <span class="st">&quot;Country&quot;</span>))</span>
+<span id="cb50-4"><a href="interactive-component.html#cb50-4" aria-hidden="true" tabindex="-1"></a>rawdata<span class="sc">$</span>Year <span class="ot">=</span> <span class="fu">as.numeric</span>(rawdata<span class="sc">$</span>Year)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="interactive-component.html#cb51-1" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">=</span> <span class="fu">ggplot</span>(rawdata, <span class="fu">aes</span>(<span class="at">x =</span> long, <span class="at">y =</span> lat, <span class="at">group =</span> group))<span class="sc">+</span> </span>
+<span id="cb51-2"><a href="interactive-component.html#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the same as the setting with summary plot</span></span>
+<span id="cb51-3"><a href="interactive-component.html#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">log10</span>(deaths)), <span class="at">color =</span> <span class="st">&#39;black&#39;</span>)<span class="sc">+</span></span>
+<span id="cb51-4"><a href="interactive-component.html#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_manual</span>(<span class="at">frames =</span> Year) <span class="sc">+</span></span>
+<span id="cb51-5"><a href="interactive-component.html#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># use year as the animation parameter</span></span>
+<span id="cb51-6"><a href="interactive-component.html#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&#39;#FFF68F&#39;</span>,<span class="at">high =</span> <span class="st">&#39;#FC4902&#39;</span>) <span class="sc">+</span></span>
+<span id="cb51-7"><a href="interactive-component.html#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&#39;Year:&#39;</span>,<span class="st">&#39;{current_frame}&#39;</span>)) <span class="sc">+</span></span>
+<span id="cb51-8"><a href="interactive-component.html#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make the title changes among different plot</span></span>
+<span id="cb51-9"><a href="interactive-component.html#cb51-9" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>()</span></code></pre></div>
+<pre><code>## Inverted geom defaults of fill and color/colour.
+## To change them back, use invert_geom_defaults().</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="interactive-component.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">animate</span>(g2,<span class="at">fps =</span> <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-35-1.gif" /><!-- --></p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="interactive-component.html#cb54-1" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">=</span> <span class="fu">ggplot</span>(rawdata, <span class="fu">aes</span>(<span class="at">x =</span> long, <span class="at">y =</span> lat, <span class="at">group =</span> group))<span class="sc">+</span> </span>
+<span id="cb54-2"><a href="interactive-component.html#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the same as the setting with summary plot</span></span>
+<span id="cb54-3"><a href="interactive-component.html#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">log10</span>(damageadj)), <span class="at">color =</span> <span class="st">&#39;black&#39;</span>)<span class="sc">+</span></span>
+<span id="cb54-4"><a href="interactive-component.html#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_manual</span>(<span class="at">frames =</span> Year) <span class="sc">+</span></span>
+<span id="cb54-5"><a href="interactive-component.html#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># use year as the animation parameter</span></span>
+<span id="cb54-6"><a href="interactive-component.html#cb54-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&#39;#FFF68F&#39;</span>,<span class="at">high =</span> <span class="st">&#39;#FC4902&#39;</span>) <span class="sc">+</span></span>
+<span id="cb54-7"><a href="interactive-component.html#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&#39;Year:&#39;</span>,<span class="st">&#39;{current_frame}&#39;</span>)) <span class="sc">+</span></span>
+<span id="cb54-8"><a href="interactive-component.html#cb54-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make the title changes among different plot</span></span>
+<span id="cb54-9"><a href="interactive-component.html#cb54-9" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>()</span>
+<span id="cb54-10"><a href="interactive-component.html#cb54-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-11"><a href="interactive-component.html#cb54-11" aria-hidden="true" tabindex="-1"></a><span class="fu">animate</span>(g3,<span class="at">fps =</span> <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-36-1.gif" /><!-- --></p>
 
 </div>
             </section>
