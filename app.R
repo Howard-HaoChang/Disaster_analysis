@@ -6,6 +6,10 @@ library(plotly)
 disaster = read.csv('data/disaster.csv') %>%
     select(-X)
 mapdata = map_data("world")
+GDP = read.csv('data/GDP.csv') %>%
+    select(-X) %>%
+    pivot_longer(cols = X1960:X2020, values_to = 'gdp', names_to = 'year') %>%
+    mutate(year = as.numeric(substr(year, 2, 5)))
 
 # generate a certain disaster matrix
 disaster_raw = disaster %>%
@@ -20,9 +24,10 @@ country = sort(unique(mapdata$region))
 data = data.frame(Year = rep(seq(1900,2022), each = length(country)), Country = rep(country, 123))
 data1 = data %>% left_join(disaster_raw)
 data1[is.na(data1)] = 0
+data2 = data1 %>% left_join(GDP, by = c('Year'='year', 'Country'='Country.Name'))
 
 # join the region and country
-rawdata = left_join(mapdata,data1,by=c("region" = "Country"))
+rawdata = left_join(mapdata,data2,by=c("region" = "Country"))
 rawdata$Year = as.numeric(rawdata$Year)
 
 # Define UI for application that draws a histogram
@@ -59,15 +64,47 @@ server <- function(input, output) {
 
     output$distPlot <- renderPlotly({
         # generate the ggplot
-        g = ggplot(df(), aes(x = long, y = lat, group = group, text = region))+ 
-            # take longitude and latitude as x and y, a certain region as a group
-            geom_polygon(data = df(), aes(fill = log10(deaths)), color = 'black')+
-            # draw a map filled by log10(deaths), and separate each country by black lines
-            scale_fill_gradient(low = '#FFF68F',high = '#FC4902') +
-            # use a common used heat map color setting
-            labs(title = 'Total Death Number for Every Country')+
-            # rename the plot
-            ggdark::dark_theme_bw() 
+        if(input$Variable == 'GDP'){
+            g = ggplot(df(), aes(x = long, y = lat, group = group, text = region))+ 
+                # take longitude and latitude as x and y, a certain region as a group
+                geom_polygon(data = df(), aes(fill = log10(gdp)), color = 'black')+
+                # draw a map filled by log10(deaths), and separate each country by black lines
+                scale_fill_gradient(low = '#FFF68F',high = '#FC4902') +
+                # use a common used heat map color setting
+                labs(title = 'Number of log GDP for Every Country')+
+                # rename the plot
+                ggdark::dark_theme_bw() 
+        } else if(input$Variable == 'Damage'){
+            g = ggplot(df(), aes(x = long, y = lat, group = group, text = region))+ 
+                # take longitude and latitude as x and y, a certain region as a group
+                geom_polygon(data = df(), aes(fill = log10(damage)), color = 'black')+
+                # draw a map filled by log10(deaths), and separate each country by black lines
+                scale_fill_gradient(low = '#FFF68F',high = '#FC4902') +
+                # use a common used heat map color setting
+                labs(title = 'Number of log Damage for Every Country')+
+                # rename the plot
+                ggdark::dark_theme_bw()
+        } else if(input$Variable == 'Adjusted Damage'){
+            g = ggplot(df(), aes(x = long, y = lat, group = group, text = region))+ 
+                # take longitude and latitude as x and y, a certain region as a group
+                geom_polygon(data = df(), aes(fill = log10(damageadj)), color = 'black')+
+                # draw a map filled by log10(deaths), and separate each country by black lines
+                scale_fill_gradient(low = '#FFF68F',high = '#FC4902') +
+                # use a common used heat map color setting
+                labs(title = 'Number of log adjusted Damage for Every Country')+
+                # rename the plot
+                ggdark::dark_theme_bw() 
+        } else if(input$Variable == 'Deaths'){
+            g = ggplot(df(), aes(x = long, y = lat, group = group, text = region))+ 
+                # take longitude and latitude as x and y, a certain region as a group
+                geom_polygon(data = df(), aes(fill = log10(deaths)), color = 'black')+
+                # draw a map filled by log10(deaths), and separate each country by black lines
+                scale_fill_gradient(low = '#FFF68F',high = '#FC4902') +
+                # use a common used heat map color setting
+                labs(title = 'Number of log Deaths for Every Country')+
+                # rename the plot
+                ggdark::dark_theme_bw() 
+        }
         
         ggplotly(g, tooltip = c("text",'fill'))
     })
