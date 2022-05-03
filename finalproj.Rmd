@@ -1,0 +1,236 @@
+--- 
+title: "Disaster Analysis"
+author: 
+  - Jiachen Liu
+  - Hao Chang
+  - Yihui Xie
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
+
+# Introduction
+
+As the pandemic grow rapidly after 2020 and developed a kind of stable pattern nowadays, it has a great influence on the human livings and other activities. Actually this is not the only disaster that had a great influence on humans' live. There are several big disaster that are greatly recorded in the history. For example, the Valdivia Earthquake Strikes Chile, the Chernobyl nuclear disaster, the Indian Ocean Tsunami etc. They've all made a big damage on humans' life as well as economic.
+
+We are interested in the disaster damage pattern in different region and different time. Is there any clustering patterns? Is there a inside seasonal pattern? Is there any relation between different disasters? These are all questions that researchers are interested in. We want to use data visualization method to have an intuitive understanding of these patterns.
+
+Also, as we want to know more about the pattern of Covid-19, for we can know about the real world based on this, we also want to compare the Covid-19 pattern and other disaster. It might give us a internal understanding of nowadays pandemic.
+
+
+
+
+
+<!--chapter:end:index.Rmd-->
+
+# Data sources
+
+```{r,echo=FALSE, message=FALSE, results='hide'}
+library(tidyverse)
+COVID = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
+GDP = read.csv("data/world_bank_gdp.csv")
+Disaster <- readxl::read_xlsx("data/disaster data.xlsx")
+```
+
+## Disester Data
+
+Our disaster Data is coming from [The International Disaster Data Center for research on the Epidemiology of Disaster](https://public.emdat.be/data). We downloaded the dataset with default setting. The web page is as shown below:
+
+![International Disaster Data Center Website](docs/disaster_web_Image.png)
+
+EM-DAT contains essential core data on the occurrence and effects of over 22,000 mass disasters worldwide from 1900 to the present day.
+
+The source of the dataset is described as below, and hence high credibility.
+> The database is compiled from various sources including UN, governmental and non-governmental agencies, insurance companies, research institutes and press agencies. As there can be conflicting information and figures, CRED has established a method of ranking these sources according to their ability to provide trustworthy and complete data. In the majority of cases, a disaster will only be entered into EM-DAT if at least two sources report the disaster's occurrence in terms of deaths and/or affected persons.
+
+```{r}
+sprintf('The row number of disaster dataset is %.0f, and the column number is %.0f.', dim(Disaster)[1], dim(Disaster)[2])
+```
+```{r}
+# The Names including
+print(colnames(Disaster))
+```
+
+## COVID Data
+
+Our COVID data is from a [repository](https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series) from Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE). We used only the deaths number and read the data directly from the repo.
+
+![COVID Data Center Website](docs/covid_web_Image.png)
+The dataset also supported by the ESRI Living Atlas Team and the Johns Hopkins University Applied Physics Lab (JHU APL), and subject is read in from the daily case report. The time series tables are subject to be updated if inaccuracies are identified in our historical data.
+
+```{r}
+sprintf('The row number of covid dataset is %.0f, and the column number is %.0f.', dim(COVID)[1], dim(COVID)[2])
+```
+
+```{r}
+# The Names including
+print(colnames(COVID)[1:20])
+# And all the later columns are time series data up to now. Each column represent the total death number up to that day.
+```
+
+## GDP Data
+
+Our GDP data is downloaded from [The World Bank](https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators). We used the world development indicators database, which is the primary World Bank collection of development indicators, compiled from officially recognized international sources. And it presents the most current and accurate global development data available, and includes national, regional and global estimates.
+
+![COVID Data Center Website](docs/gdp_web_Image.png)
+As shown above, we include all Countries and Time(Years) available, and GDP is what we need.
+
+```{r}
+sprintf('The row number of GDP dataset is %.0f, and the column number is %.0f.', dim(GDP)[1], dim(GDP)[2])
+```
+
+```{r}
+# The Names including
+print(colnames(GDP)[1:20])
+# And all the later columns are time series data up to now.
+```
+
+
+
+<!--chapter:end:02-data.Rmd-->
+
+# Data transformation
+
+```{r,echo=FALSE, message=FALSE, results='hide'}
+library(tidyverse)
+library(countrycode)
+```
+
+## Read GDP data
+```{r}
+df_covid_raw = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
+covid_df = df_covid_raw %>% select(-(1:4)) 
+covid_df = cbind("Country.Region" = df_covid_raw$Country.Region, 
+                 "Total.Death" = rowSums(covid_df)) %>% data.frame()
+covid_df = covid_df %>% mutate("Total.Death" = as.numeric(Total.Death)) %>% 
+  group_by(Country.Region) %>% 
+  summarise("Total.Death" = sum(Total.Death, na.rm = T))
+head(covid_df)
+```
+
+```{r}
+countryname(unique(covid_df$Country.Region))
+countryname(unique(disaster))
+```
+Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :
+  Some values were not matched unambiguously: Diamond Princess, Micronesia, MS Zaandam, Summer Olympics 2020, Winter Olympics 2022
+  
+```{r}
+#remove Summer Olympics 2020 & Winter Olympics 2022,Micronesia
+covid_remove <- covid_df[-which(covid_df$Country.Region %in% c("Summer Olympics 2020", "Winter Olympics 2022", "Micronesia")),]
+#Diamond Princess - Japan
+covid_remove$Country.Region[covid_remove$Country.Region == "Diamond Princess"] <- "Japan"
+#MS Zaandam - Netherlands
+covid_remove$Country.Region[covid_remove$Country.Region == "MS Zaandam"] <- "Netherlands"
+```
+
+```{r}
+GDP_temp = read.csv("data/world_bank_gdp.csv")
+GDP <- GDP_temp[,-c(1,2)]
+```
+
+```{r}
+countryname(unique(GDP$Country.Name))
+```
+
+```{r}
+raw_data <- readxl::read_xlsx("data/disaster data.xlsx")
+data_temp <- raw_data
+latitude.longtitude.data <- map_data("world")
+```
+
+```{r}
+countryname(unique(data_temp$Country))
+countryname(unique(latitude.longtitude.data$region))
+```
+Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :
+  Some values were not matched unambiguously: Azores Islands, Canary Is, Serbia Montenegro, Yemen P Dem Rep
+
+Warning in countrycode_convert(sourcevar = sourcevar, origin = origin, destination = dest,  :
+  Some values were not matched unambiguously: Ascension Island, Azores, Barbuda, Canary Islands, Chagos Archipelago, Grenadines, Heard Island, Madeira Islands, Micronesia, Saba, Saint Martin, Siachen Glacier, Sint Eustatius, Virgin Islands
+
+```{r}
+#remove the country names: "Micronesia (Federated States of)","Tuvalu"
+data_remove <- data_temp[-which(data_temp$Country %in% c("Micronesia (Federated States of)","Tuvalu")),]
+##replace the country names
+#Azores Islands - Azores
+data_remove$Country[data_remove$Country == "Azores Islands"] <- "Azores"
+#Canary Is - Canary Islands
+data_remove$Country[data_remove$Country == "Canary Is"] <- "Canary Islands"
+#Yemen P Dem Rep & Yemen Arab Rep - Yemen
+data_remove$Country[data_remove$Country %in% c("Yemen P Dem Rep","Yemen Arab Rep")] <- "Yemen"
+#Virgin Island (British) - Virgin Islands
+data_remove$Country[data_remove$Country == "Virgin Island (British)"] <- "Virgin Islands"
+#Virgin Island (U.S.) - Virgin Islands
+data_remove$Country[data_remove$Country == "Virgin Island (U.S.)"] <- "Virgin Islands"
+#Hong Kong - China
+data_remove$Country[data_remove$Country == "Hong Kong"] <- "China"
+#Macao - China
+data_remove$Country[data_remove$Country == "Macao"] <- "China"
+#Netherlands Antilles - Netherlands
+data_remove$Country[data_remove$Country == "Netherlands Antilles"] <- "Netherlands"
+#Saint Martin (French Part) - Saint Martin
+data_remove$Country[data_remove$Country == "Saint Martin (French Part)"] <- "Saint Martin"
+#Tokelau - New Zealand
+data_remove$Country[data_remove$Country == "Tokelau"] <- "New Zealand"
+```
+
+```{r}
+names(disaster_match)
+disaster <- disaster_match %>%
+  select("Year","Disaster Group","Disaster Subgroup","Disaster Type","Disaster Subtype","Country","ISO","Region",
+         "Continent","Total Deaths","Total Damages ('000 US$)","Total Damages, Adjusted ('000 US$)")
+
+colnames(disaster) <- c("Year","Disaster Group","Disaster Subgroup","Disaster Type","Disaster Subtype","Country","ISO","Region","Continent","Total Deaths","Total Damages","Total Damages Adjusted")
+```
+
+<!--chapter:end:03-cleaning.Rmd-->
+
+# Missing values
+
+```{r, message=F, echo=F, warning=F}
+library(readxl)
+library(redav)
+library(tidyverse)
+library(mi)
+library(sf)
+library(tmap)
+library(zoo)
+```
+
+
+
+<!--chapter:end:04-missing.Rmd-->
+
+# Results
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+df = read.csv("data/covid.csv")
+```
+
+```{r}
+df_covid_raw = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
+```
+
+```{r}
+df_covid_raw %>% select(Country.Region, X4.29.22) %>% 
+  arrange(desc(X4.29.22))
+```
+
+
+<!--chapter:end:05-results.Rmd-->
+
+# Interactive component
+
+
+
+<!--chapter:end:06-interactive.Rmd-->
+
+# Conclusion
+
+
+<!--chapter:end:07-conclusion.Rmd-->
+

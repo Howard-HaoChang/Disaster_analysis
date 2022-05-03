@@ -1,14 +1,25 @@
 # Results
 
-```{r}
+```{r, message=FALSE, echo=FALSE, results='hide'}
 library(tidyverse)
 ```
 
-```{r}
-df = read.csv("data/covid.csv")
+## COVID Data Exploration
+
+```{r, message=FALSE}
+df_covid = read.csv("data/covid.csv") %>% select(-X)
+summary(df_covid)
 ```
 
+### Cleveland Dot Plot
+
 ```{r}
-df %>% arrange(desc(Total.Death))
+
+```
+
+### Heatmap
+
+```{r}
+
 ```
 
