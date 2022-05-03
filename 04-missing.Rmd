@@ -11,3 +11,109 @@ library(zoo)
 ```
 
 
+## Disaster dataset
+
+```{r}
+disaster = read.csv("data/disaster_missing.csv") %>%
+  select(-X)
+```
+
+
+### By row
+
+```{r}
+rowSums(is.na(disaster)) %>%
+  sort(decreasing = TRUE) %>%
+  table()
+```
+It shows that the missing value numbers with different rows. There are for 3555 rows with no missing values, 1748 rows with 1 missing values, 14669 rows with 2 missing values, 4781 rows with 3 missing values and 742 rows with 4 missing values.
+
+Also we want to visualize it by year.
+```{r}
+missing <- disaster %>% 
+    group_by(Year) %>% 
+    summarise(sum.na = sum(is.na(Total.Deaths)+is.na(Total.Damages)+is.na(Disaster.Subtype)+is.na(Total.Damages.Adjusted)))
+
+ggplot(missing, aes(x = Year, y = sum.na)) +
+  geom_col(color = "blue", fill = "lightblue") +
+  ggtitle("Number of missing values by Year") +
+  xlab("") +
+  ylab("Number of missing station values(All Variables)") +
+  theme(axis.text.x = element_text(angle = 45)) +
+  scale_x_discrete(breaks = c('1900','1910','1920','1930','1940','1950','1960','1970','1980','1990','2000','2010','2020'))
+```
+
+It shows that the missing value has a increasing trend among all years because the data records are increasing over year.
+
+### By Column
+
+```{r, fig.width=17}
+colSums(is.na(disaster)) %>%
+  sort(decreasing = TRUE)
+
+plot_missing(disaster, percent = FALSE)
+```
+
+It shows that damage and adj.damage gets the most nas, then deaths and subtype.
+
+### By Value
+
+```{r}
+tidydata <- disaster %>% 
+    rownames_to_column("id") %>% 
+    gather(key, value, -id) %>% 
+    mutate(missing = ifelse(is.na(value), "yes", "no"))
+
+ggplot(tidydata, aes(x = key, y = fct_rev(id), fill = missing)) +
+  geom_tile() + 
+  ggtitle("ourdata with NAs") +
+  scale_fill_viridis_d() + # discrete scale
+  theme_bw()+
+  scale_y_discrete(breaks = c())
+```
+
+It gives a look at the na for each value. However I don't think that there is a relation between the nas in different variable.
+
+
+## Covid Dataset
+
+```{r}
+covid = read.csv("data/covid.csv") %>%
+  select(-X)
+```
+
+```{r}
+sum(is.na(covid))
+```
+
+There is no NA value in this data set.
+
+## GDP Dataset
+```{r}
+GDP = read.csv("data/GDP.csv")
+```
+
+This is a time series data from 1960 to 2020 for the countries around the world, we want to check the na for each countries and for each Year.
+
+### For countries
+We want to see how many NA are there for each country
+```{r}
+missing = cbind(GDP[,1:2], NAs = rowSums(matrix(as.numeric(is.na(GDP[,-c(1,2)])), nrow = nrow(GDP)))) %>%
+  arrange(desc(NAs))
+
+head(missing, 10)
+```
+
+As we can see, the missing value are tend to appear on those small countries where data are hard to collect.
+
+### For Year
+Now we want to know the missing value among time
+```{r}
+missing = cbind(Year = 1960:2020, NAs = colSums(matrix(as.numeric(is.na(GDP[,-c(1,2)])), nrow = nrow(GDP))))
+
+plot(missing, main = 'Missing values among year')
+```
+
+Here as we can see, the missing values are reducing with the year increase. That's because with the development of the technology, we have more and easier access to collect the data.
+
+

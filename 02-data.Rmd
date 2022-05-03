@@ -1,6 +1,6 @@
 # Data sources
 
-```{r,echo=FALSE, message=FALSE, results='hide'}
+```{r,echo=FALSE, message=FALSE, results='hide', warning=F}
 library(tidyverse)
 COVID = read.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
 GDP = read.csv("data/world_bank_gdp.csv")
