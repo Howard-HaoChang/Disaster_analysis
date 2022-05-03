@@ -47,7 +47,7 @@ It shows that the missing value has a increasing trend among all years because t
 
 ### By Column
 
-```{r, fig.width=17}
+```{r, fig.width=17, fig.height=7}
 colSums(is.na(disaster)) %>%
   sort(decreasing = TRUE)
 
