@@ -13,14 +13,13 @@ summary(df_covid)
 
 ### Cleveland Dot Plot
 
-```{r, fig.height=8, fig.width=5}
+```{r, fig.height=8, fig.width=6}
 df_covid %>% arrange(desc(Total.Death)) %>% head(50) %>% 
-  ggplot(aes(x = Total.Death, 
-             y = fct_reorder(Country.Region, Total.Death))) +
-  geom_point(color = '#FF773D', size = 2) +
+   mutate("Country.Region" = fct_reorder(Country.Region, Total.Death)) %>% 
+  ggplot(aes(x = Total.Death, y = Country.Region)) + 
+  geom_point(color = "#D75D47", size = 2) +
   labs(title = 'COVID-19 Cumulative Death of Countries',
-       y = '', x = "Total Death") +
-  
+       y = '', x = "Total Death")
 ```
 
 ### Heatmap
@@ -36,5 +35,8 @@ df_covid %>% left_join(df_map,
        fill = "Total Death", x = "", y = "")
   
 ```
+
+
+
 
 
