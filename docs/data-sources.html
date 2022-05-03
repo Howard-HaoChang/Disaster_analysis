@@ -25,7 +25,7 @@
 <meta name="author" content="Yihui Xie" />
 
 
-<meta name="date" content="2022-05-02" />
+<meta name="date" content="2022-05-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -171,9 +171,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.3.2" data-path="missing-values.html"><a href="missing-values.html#for-year"><i class="fa fa-check"></i><b>4.3.2</b> For Year</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#covid-data-exploration"><i class="fa fa-check"></i><b>5.1</b> COVID Data Exploration</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#cleveland-dot-plot"><i class="fa fa-check"></i><b>5.1.1</b> Cleveland Dot Plot</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#heatmap"><i class="fa fa-check"></i><b>5.1.2</b> Heatmap</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="chapter" data-level="8" data-path="gdp-time-series.html"><a href="gdp-time-series.html"><i class="fa fa-check"></i><b>8</b> GDP time series</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -274,7 +282,7 @@ The dataset also supported by the ESRI Living Atlas Team and the Johns Hopkins U
 ##  [9] &quot;X1.26.20&quot;       &quot;X1.27.20&quot;       &quot;X1.28.20&quot;       &quot;X1.29.20&quot;      
 ## [13] &quot;X1.30.20&quot;       &quot;X1.31.20&quot;       &quot;X2.1.20&quot;        &quot;X2.2.20&quot;       
 ## [17] &quot;X2.3.20&quot;        &quot;X2.4.20&quot;        &quot;X2.5.20&quot;        &quot;X2.6.20&quot;</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="data-sources.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># And all the later columns are time series data up to now.</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="data-sources.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># And all the later columns are time series data up to now. Each column represent the total death number up to that day.</span></span></code></pre></div>
 </div>
 <div id="gdp-data" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> GDP Data<a href="data-sources.html#gdp-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -285,7 +293,7 @@ As shown above, we include all Countries and Time(Years) available, and GDP is w
 <pre><code>## [1] &quot;The row number of GDP dataset is 271, and the column number is 66.&quot;</code></pre>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="data-sources.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The Names including</span></span>
 <span id="cb12-2"><a href="data-sources.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">colnames</span>(GDP)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>])</span></code></pre></div>
-<pre><code>##  [1] &quot;锘縎eries.Name&quot; &quot;Series.Code&quot;    &quot;Country.Name&quot;   &quot;Country.Code&quot;  
+<pre><code>##  [1] &quot;ï..Series.Name&quot; &quot;Series.Code&quot;    &quot;Country.Name&quot;   &quot;Country.Code&quot;  
 ##  [5] &quot;X1960..YR1960.&quot; &quot;X1961..YR1961.&quot; &quot;X1962..YR1962.&quot; &quot;X1963..YR1963.&quot;
 ##  [9] &quot;X1964..YR1964.&quot; &quot;X1965..YR1965.&quot; &quot;X1966..YR1966.&quot; &quot;X1967..YR1967.&quot;
 ## [13] &quot;X1968..YR1968.&quot; &quot;X1969..YR1969.&quot; &quot;X1970..YR1970.&quot; &quot;X1971..YR1971.&quot;
