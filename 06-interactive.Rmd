@@ -64,3 +64,8 @@ g3 = ggplot(rawdata, aes(x = long, y = lat, group = group))+
 
 animate(g3,fps = 3)
 ```
+
+
+# Interactive Display
+Here we construct a shiny interactive plot to show the Year pattern of GDP, Damage and Deaths on the world map. We can see the geographical patterns by using it.
+https://howardch.shinyapps.io/Shiny/

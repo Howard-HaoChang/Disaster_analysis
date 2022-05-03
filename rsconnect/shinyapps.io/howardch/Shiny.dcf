@@ -1,0 +1,11 @@
+name: Shiny
+title:
+username:
+account: howardch
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6226203
+bundleId:
+url: https://howardch.shinyapps.io/Shiny/
+when: 1651616766.23641
+lastSyncTime: 1651616766.23641

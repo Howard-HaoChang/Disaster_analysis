@@ -63,5 +63,21 @@ ggplot(GDPplot)+
   scale_colour_manual(name = "Type", values = col)
 ```
 
-As we can see from the plot, all the countries suffered from a GDP decrease in 2020 except China and Eygpt. For China, the reason is that it use a compulsory policy to prevent the covid from spreading thus contral the cases. For Egypt, 
+As we can see from the plot, all the countries suffered from a GDP decrease in 2020 except China and Egypt. For China, the reason is that it use a compulsory policy to prevent the Covid from spreading thus control the cases. For Egypt, 
+
+```{r}
+disaster = read.csv('data/disaster.csv') %>%
+  select(-X) %>%
+  filter(Country %in% target.Country) %>%
+  group_by(Country, Continent) %>%
+  summarize(Damage = sum(Total.Damages.Adjusted))
+
+coviddamage = GDPplot %>%
+  filter(year==2020) %>%
+  mutate(diff = est - gdp) %>% 
+  left_join(disaster, by  = c('Country.Name'='Country'))
+
+ggplot(coviddamage, aes(x=log(Damage), y = log(diff)))+
+  geom_point(aes(color = Continent), size = 5)
+```
 
