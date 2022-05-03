@@ -136,7 +136,7 @@ plot.data3 <- disaster %>%
 
 parcoords(plot.data3,
           color = list(
-            colorBy = "Country",
+            colorBy = "Disaster.Group",
             colorScale = "scaleOrdinal",
             colorScheme = "schemeCategory10"),
           rownames = F,
