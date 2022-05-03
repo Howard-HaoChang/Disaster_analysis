@@ -20,5 +20,9 @@ gdp-dataset
 for-countries
 for-year
 results
+covid-data-exploration
+cleveland-dot-plot
+heatmap
 interactive-component
 conclusion
+gdp-time-series
