@@ -15,7 +15,7 @@ library(cowplot)
 library(GGally)
 library(parcoords)
 
-disaster <- read.csv("/Users/zshong/Desktop/Disaster_analysis/data/disaster.csv")
+disaster <- read.csv("data/disaster.csv")
 ```
 
 ## Analysis of the relationship between death and economic loss
@@ -32,7 +32,7 @@ p1.1 <- plot.data1 %>%
   ggplot( aes(Deaths, Adjusted.Damages, size = disaster.Num, color=Continent)) +
   geom_point() +
   theme(legend.position = "none") +
-  geom_text_repel(aes(y=Adjusted.Damages,x=Deaths,label=Country))
+  geom_text_repel(aes(y=Adjusted.Damages,x=Deaths,label=Country), col = 'black', size = 4, alpha = 0.5)
 
 # plot 2
 p1.2 <-ggplot(plot.data1,aes(log(Deaths), log(Adjusted.Damages), size = disaster.Num, color=Continent, text = Country)) +
