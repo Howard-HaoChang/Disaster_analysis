@@ -5,7 +5,6 @@ library(zoo)
 library(forecast)
 ```
 
-
 Now we want to compare the covid damage with the disaster damage. However the covid is not a disaster that can show the economic damage clearly as some natural disaster as. We then try to develop a GDP decrease by predicting a no covid possible GDP and compare the difference.
 
 First we need to find out the target contries and then making predictions.
