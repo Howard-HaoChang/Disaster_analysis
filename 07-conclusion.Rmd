@@ -4,3 +4,9 @@
 
 Through the above analysis of disasters, we can find the following points. First of all, this disaster's data contains more natural disasters than technological disasters, and we think it's because of a problem with its data collection process. We found that he did not include disasters caused by technology such as war, firearm death, etc., we guessed that it may be because this type of data is difficult to count. Given the above situation, we found that in terms of the frequency of disasters, technological disasters are all very high. In terms of deaths and economic losses, natural disasters are firmly at the forefront. The reason for this, we believe, may be that the scale of natural disasters far exceeds that of technological disasters, so although technological disasters occur frequently, their destructive power is still less than that of natural disasters. Of course, for the overall trend, deaths and economic losses are still positively correlated with the frequency of disasters. Secondly, the more developed countries are more in place for the protection of personnel.
 
+
+
+
+## Comparing Disaster Damage and Covid
+
+According to our analysis, we want to compare the pattern between COVID and other disaster for different countries. As we can see, most of the developed countries might have the same pattern for COVID and other disaster. But for some of the developing countries and countries from Oceania, it's not the case. It's because of both geographical and economical reasons. We can have further discussion on the reasons and different pattern.
