@@ -234,7 +234,7 @@ df_covid %>% arrange(desc(Total.Death)) %>% head(50) %>%
        y = '', x = "Total Death")
 ```
 
-Above plot showed the total death of the top 50 countries in descending order. As we can see, United States have the largest death number, which is close to 1000k. Besides the US, four other countries stood out: Brazil, India, Russia, and Mexico. These five countries have much more cases than others, one reason is they have comparatively large population size. Three out of five top countries are in America. Another level is from Peru to Turkey. In this level many countries are European countries with smaller population. The main reason for their total death could be related to policies.
+Above plot showed the total death of the top 50 countries in descending order. As we can see, United States have the largest death number, which is close to 1000k. Besides the US, four other countries stood out: Brazil, India, Russia, and Mexico. These five countries have much more cases than others, one reason is they have comparatively large population size. Three out of five top countries are in America, and we think they might contaminated each other in some degree. Another other death level is from Peru to Turkey. In this level many countries are European countries with smaller population. The main reason that caused their total death could be related to policies.
 
 ### Heatmap
 
@@ -252,6 +252,7 @@ df_covid %>% left_join(df_map,
 We plotted the heatmap to see some geographic pattern. As we can see most of the darker countries have a vast territory, and along with that larger population. Population could also be the reason African and European countries have comparatively pale colors. Another reason for Africa to have less death could be that COVID virus is afraid of heat. Island countries are less likely to contaminated by others, so they seems to have less deaths in general.
 
 ### Time series for GDP
+
 Now we want to compare the ovid damage with the disaster damage. However the Covid is not a disaster that can show the economic damage clearly as some natural disaster as. We then try to develop a GDP decrease by predicting a no Covid possible GDP and compare the difference.
 
 First we need to find out the target countries and then making predictions.

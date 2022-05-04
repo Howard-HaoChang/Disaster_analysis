@@ -30,3 +30,4 @@ time-series-for-gdp
 interactive-component
 conclusion
 disaster-data-1
+comparing-disaster-damage-and-covid
