@@ -208,8 +208,11 @@ covid_remove$Country.Region[covid_remove$Country.Region == "MS Zaandam"] <- "Net
 # adding a column called "country.name" to be the standard country names, and when mismatch then the country must be one of our adjusted countries, so just keep it as it is.
 covid_match <- covid_remove %>%
   mutate(Country.Region = ifelse(is.na(countryname(covid_remove$Country.Region)),covid_remove$Country.Region,countryname(covid_remove$Country.Region)))
+<<<<<<< HEAD
 getwd()
 write.csv(covid_match,"/Users/zshong/Desktop/covid.csv")
+=======
+>>>>>>> 86942592117ba4245fd450d7a6febcbcd17b8b23
 ```
 
 ## GDP time series data
@@ -704,7 +707,21 @@ ggplot(GDPplot)+
   scale_colour_manual(name = "Type", values = col)
 ```
 
+<<<<<<< HEAD
 As we can see from the plot, all the countries suffered from a GDP decrease in 2020 except China, Egypt, Ethiopia and Uganda. For China, the reason is that it use a compulsory policy to prevent the Covid from spreading thus control the cases. For the African countries, they are now going through a rapid economic increasing which can not be shown by the time series model, so that their real value are larger than the estimate value.
+=======
+<<<<<<< HEAD
+As we can see from the plot, all the countries suffered from a GDP decrease in 2020 except China, Egypt, Ethiopia and Uganda. For China, the reason is that it use a compulsory policy to prevent the Covid from spreading thus control the cases. For the African countries, they are now going through a rapid economic increasing which can not be shown by the time series model, so that their real value are larger than the estimate value.
+=======
+<<<<<<< HEAD
+As we can see from the plot, all the countries suffered from a GDP decrease in 2020 except China and Eygpt. For China, the reason is that it use a compulsory policy to prevent the covid from spreading thus contral the cases. For Egypt, 
+
+
+<!--chapter:end:time_series.Rmd-->
+=======
+As we can see from the plot, all the countries suffered from a GDP decrease in 2020 except China and Egypt. For China, the reason is that it use a compulsory policy to prevent the Covid from spreading thus control the cases. For Egypt, 
+>>>>>>> 73dd7caa6413a2d862b19c77b301414a05ff8256
+>>>>>>> 86942592117ba4245fd450d7a6febcbcd17b8b23
 
 ```{r}
 disaster = read.csv('data/disaster.csv') %>%
