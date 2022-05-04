@@ -54,6 +54,16 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/parallel-coordinates-2.1.8/parcoords.css" rel="stylesheet" />
+<script src="libs/parcoords-binding-1.0.0/parcoords.js"></script>
+<script src="libs/d3-5.16.0/d3.min.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -173,15 +183,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#covid-data-exploration"><i class="fa fa-check"></i><b>5.1</b> COVID Data Exploration</a>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#disaster-data-exploration"><i class="fa fa-check"></i><b>5.1</b> Disaster Data Exploration</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#cleveland-dot-plot"><i class="fa fa-check"></i><b>5.1.1</b> Cleveland Dot Plot</a></li>
-<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#heatmap"><i class="fa fa-check"></i><b>5.1.2</b> Heatmap</a></li>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#analysis-of-the-relationship-between-number-of-disaster-deaths-and-damages"><i class="fa fa-check"></i><b>5.1.1</b> Analysis of the relationship between number of disaster, Deaths and Damages</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#analysis-of-the-relationship-between-death-and-economic-loss"><i class="fa fa-check"></i><b>5.1.2</b> Analysis of the relationship between death and economic loss</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#covid-data-exploration"><i class="fa fa-check"></i><b>5.2</b> COVID Data Exploration</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#cleveland-dot-plot"><i class="fa fa-check"></i><b>5.2.1</b> Cleveland Dot Plot</a></li>
+<li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#heatmap"><i class="fa fa-check"></i><b>5.2.2</b> Heatmap</a></li>
+<li class="chapter" data-level="5.2.3" data-path="results.html"><a href="results.html#time-series-for-gdp"><i class="fa fa-check"></i><b>5.2.3</b> Time series for GDP</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
-<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
-<li class="chapter" data-level="8" data-path="gdp-time-series.html"><a href="gdp-time-series.html"><i class="fa fa-check"></i><b>8</b> GDP time series</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="conclusion.html"><a href="conclusion.html#disaster-data-1"><i class="fa fa-check"></i><b>7.1</b> Disaster Data</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -203,53 +221,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="interactive-component" class="section level1 hasAnchor" number="6">
 <h1><span class="header-section-number">Chapter 6</span> Interactive component<a href="interactive-component.html#interactive-component" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="interactive-component.html#cb47-1" aria-hidden="true" tabindex="-1"></a>disaster <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">&#39;data/disaster.csv&#39;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb47-2"><a href="interactive-component.html#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>X)</span>
-<span id="cb47-3"><a href="interactive-component.html#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-4"><a href="interactive-component.html#cb47-4" aria-hidden="true" tabindex="-1"></a>mapdata <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">&#39;data/Location.csv&#39;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb47-5"><a href="interactive-component.html#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>X)</span></code></pre></div>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="interactive-component.html#cb48-1" aria-hidden="true" tabindex="-1"></a>disaster_raw <span class="ot">=</span> disaster <span class="sc">%&gt;%</span></span>
-<span id="cb48-2"><a href="interactive-component.html#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year,Country) <span class="sc">%&gt;%</span></span>
-<span id="cb48-3"><a href="interactive-component.html#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">deaths =</span> <span class="fu">sum</span>(Total.Deaths, <span class="at">na.rm =</span> T),</span>
-<span id="cb48-4"><a href="interactive-component.html#cb48-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">damage =</span> <span class="fu">sum</span>(Total.Damages, <span class="at">na.rm =</span> T),</span>
-<span id="cb48-5"><a href="interactive-component.html#cb48-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">damageadj =</span> <span class="fu">sum</span>(Total.Damages.Adjusted, <span class="at">na.rm =</span> T)) <span class="sc">%&gt;%</span></span>
-<span id="cb48-6"><a href="interactive-component.html#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code></pre></div>
-<pre><code>## `summarise()` has grouped output by &#39;Year&#39;. You can override using the
-## `.groups` argument.</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="interactive-component.html#cb50-1" aria-hidden="true" tabindex="-1"></a>country <span class="ot">=</span> <span class="fu">sort</span>(<span class="fu">unique</span>(mapdata<span class="sc">$</span>Country))</span>
-<span id="cb50-2"><a href="interactive-component.html#cb50-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Year =</span> <span class="fu">as.character</span>(<span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">1900</span>,<span class="dv">2022</span>), <span class="at">each =</span> <span class="fu">length</span>(country))), <span class="at">Country =</span> <span class="fu">rep</span>(country, <span class="dv">123</span>))</span>
-<span id="cb50-3"><a href="interactive-component.html#cb50-3" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Year <span class="ot">=</span> <span class="fu">as.numeric</span>(data<span class="sc">$</span>Year)</span>
-<span id="cb50-4"><a href="interactive-component.html#cb50-4" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">=</span> data <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(disaster_raw)</span></code></pre></div>
-<pre><code>## Joining, by = c(&quot;Year&quot;, &quot;Country&quot;)</code></pre>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="interactive-component.html#cb52-1" aria-hidden="true" tabindex="-1"></a>data1[<span class="fu">is.na</span>(data1)] <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb52-2"><a href="interactive-component.html#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-3"><a href="interactive-component.html#cb52-3" aria-hidden="true" tabindex="-1"></a>rawdata <span class="ot">=</span> <span class="fu">left_join</span>(mapdata,data1,<span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;Country&quot;</span> <span class="ot">=</span> <span class="st">&quot;Country&quot;</span>))</span>
-<span id="cb52-4"><a href="interactive-component.html#cb52-4" aria-hidden="true" tabindex="-1"></a>rawdata<span class="sc">$</span>Year <span class="ot">=</span> <span class="fu">as.numeric</span>(rawdata<span class="sc">$</span>Year)</span></code></pre></div>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="interactive-component.html#cb53-1" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">=</span> <span class="fu">ggplot</span>(rawdata, <span class="fu">aes</span>(<span class="at">x =</span> long, <span class="at">y =</span> lat, <span class="at">group =</span> group))<span class="sc">+</span> </span>
-<span id="cb53-2"><a href="interactive-component.html#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the same as the setting with summary plot</span></span>
-<span id="cb53-3"><a href="interactive-component.html#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">log10</span>(deaths)), <span class="at">color =</span> <span class="st">&#39;black&#39;</span>)<span class="sc">+</span></span>
-<span id="cb53-4"><a href="interactive-component.html#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_manual</span>(<span class="at">frames =</span> Year) <span class="sc">+</span></span>
-<span id="cb53-5"><a href="interactive-component.html#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># use year as the animation parameter</span></span>
-<span id="cb53-6"><a href="interactive-component.html#cb53-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&#39;#FFF68F&#39;</span>,<span class="at">high =</span> <span class="st">&#39;#FC4902&#39;</span>) <span class="sc">+</span></span>
-<span id="cb53-7"><a href="interactive-component.html#cb53-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&#39;Year:&#39;</span>,<span class="st">&#39;{current_frame}&#39;</span>)) <span class="sc">+</span></span>
-<span id="cb53-8"><a href="interactive-component.html#cb53-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make the title changes among different plot</span></span>
-<span id="cb53-9"><a href="interactive-component.html#cb53-9" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>()</span></code></pre></div>
-<pre><code>## Inverted geom defaults of fill and color/colour.
-## To change them back, use invert_geom_defaults().</code></pre>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="interactive-component.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">animate</span>(g2,<span class="at">fps =</span> <span class="dv">3</span>)</span></code></pre></div>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-39-1.gif" /><!-- --></p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="interactive-component.html#cb56-1" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">=</span> <span class="fu">ggplot</span>(rawdata, <span class="fu">aes</span>(<span class="at">x =</span> long, <span class="at">y =</span> lat, <span class="at">group =</span> group))<span class="sc">+</span> </span>
-<span id="cb56-2"><a href="interactive-component.html#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the same as the setting with summary plot</span></span>
-<span id="cb56-3"><a href="interactive-component.html#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">log10</span>(damageadj)), <span class="at">color =</span> <span class="st">&#39;black&#39;</span>)<span class="sc">+</span></span>
-<span id="cb56-4"><a href="interactive-component.html#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_manual</span>(<span class="at">frames =</span> Year) <span class="sc">+</span></span>
-<span id="cb56-5"><a href="interactive-component.html#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># use year as the animation parameter</span></span>
-<span id="cb56-6"><a href="interactive-component.html#cb56-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&#39;#FFF68F&#39;</span>,<span class="at">high =</span> <span class="st">&#39;#FC4902&#39;</span>) <span class="sc">+</span></span>
-<span id="cb56-7"><a href="interactive-component.html#cb56-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&#39;Year:&#39;</span>,<span class="st">&#39;{current_frame}&#39;</span>)) <span class="sc">+</span></span>
-<span id="cb56-8"><a href="interactive-component.html#cb56-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make the title changes among different plot</span></span>
-<span id="cb56-9"><a href="interactive-component.html#cb56-9" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>()</span>
-<span id="cb56-10"><a href="interactive-component.html#cb56-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-11"><a href="interactive-component.html#cb56-11" aria-hidden="true" tabindex="-1"></a><span class="fu">animate</span>(g3,<span class="at">fps =</span> <span class="dv">3</span>)</span></code></pre></div>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-40-1.gif" /><!-- --></p>
+<p>Here we construct a shiny interactive plot to show the Year pattern of GDP, Damage and Deaths on the world map. We can see the geographical patterns by using it.
+<a href="https://howardch.shinyapps.io/Shiny/" class="uri">https://howardch.shinyapps.io/Shiny/</a></p>
 
 </div>
             </section>

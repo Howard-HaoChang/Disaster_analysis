@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="interactive-component.html"/>
-<link rel="next" href="gdp-time-series.html"/>
+
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -54,6 +54,16 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/parallel-coordinates-2.1.8/parcoords.css" rel="stylesheet" />
+<script src="libs/parcoords-binding-1.0.0/parcoords.js"></script>
+<script src="libs/d3-5.16.0/d3.min.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -173,15 +183,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#covid-data-exploration"><i class="fa fa-check"></i><b>5.1</b> COVID Data Exploration</a>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#disaster-data-exploration"><i class="fa fa-check"></i><b>5.1</b> Disaster Data Exploration</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#cleveland-dot-plot"><i class="fa fa-check"></i><b>5.1.1</b> Cleveland Dot Plot</a></li>
-<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#heatmap"><i class="fa fa-check"></i><b>5.1.2</b> Heatmap</a></li>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#analysis-of-the-relationship-between-number-of-disaster-deaths-and-damages"><i class="fa fa-check"></i><b>5.1.1</b> Analysis of the relationship between number of disaster, Deaths and Damages</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#analysis-of-the-relationship-between-death-and-economic-loss"><i class="fa fa-check"></i><b>5.1.2</b> Analysis of the relationship between death and economic loss</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#covid-data-exploration"><i class="fa fa-check"></i><b>5.2</b> COVID Data Exploration</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#cleveland-dot-plot"><i class="fa fa-check"></i><b>5.2.1</b> Cleveland Dot Plot</a></li>
+<li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#heatmap"><i class="fa fa-check"></i><b>5.2.2</b> Heatmap</a></li>
+<li class="chapter" data-level="5.2.3" data-path="results.html"><a href="results.html#time-series-for-gdp"><i class="fa fa-check"></i><b>5.2.3</b> Time series for GDP</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
-<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
-<li class="chapter" data-level="8" data-path="gdp-time-series.html"><a href="gdp-time-series.html"><i class="fa fa-check"></i><b>8</b> GDP time series</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="conclusion.html"><a href="conclusion.html#disaster-data-1"><i class="fa fa-check"></i><b>7.1</b> Disaster Data</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -203,15 +221,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="conclusion" class="section level1 hasAnchor" number="7">
 <h1><span class="header-section-number">Chapter 7</span> Conclusion<a href="conclusion.html#conclusion" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="disaster-data-1" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Disaster Data<a href="conclusion.html#disaster-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Through the above analysis of disasters, we can find the following points. First of all, this disaster’s data contains more natural disasters than technological disasters, and we think it’s because of a problem with its data collection process. We found that he did not include disasters caused by technology such as war, firearm death, etc., we guessed that it may be because this type of data is difficult to count. Given the above situation, we found that in terms of the frequency of disasters, technological disasters are all very high. In terms of deaths and economic losses, natural disasters are firmly at the forefront. The reason for this, we believe, may be that the scale of natural disasters far exceeds that of technological disasters, so although technological disasters occur frequently, their destructive power is still less than that of natural disasters. Of course, for the overall trend, deaths and economic losses are still positively correlated with the frequency of disasters. Secondly, the more developed countries are more in place for the protection of personnel.</p>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="interactive-component.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="gdp-time-series.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="interactive-component.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
