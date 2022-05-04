@@ -118,8 +118,6 @@ covid_remove$Country.Region[covid_remove$Country.Region == "MS Zaandam"] <- "Net
 # adding a column called "country.name" to be the standard country names, and when mismatch then the country must be one of our adjusted countries, so just keep it as it is.
 covid_match <- covid_remove %>%
   mutate(Country.Region = ifelse(is.na(countryname(covid_remove$Country.Region)),covid_remove$Country.Region,countryname(covid_remove$Country.Region)))
-getwd()
-write.csv(covid_match,"/Users/zshong/Desktop/covid.csv")
 ```
 
 ## GDP time series data
