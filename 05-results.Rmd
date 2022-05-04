@@ -1,5 +1,9 @@
 # Results
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
 ```{r, message=FALSE, echo=FALSE, results='hide'}
 library(tidyverse)
 library(ggrepel)

@@ -301,23 +301,23 @@ The dataset also supported by the ESRI Living Atlas Team and the Johns Hopkins U
 ##  [9] &quot;X1.26.20&quot;       &quot;X1.27.20&quot;       &quot;X1.28.20&quot;       &quot;X1.29.20&quot;      
 ## [13] &quot;X1.30.20&quot;       &quot;X1.31.20&quot;       &quot;X2.1.20&quot;        &quot;X2.2.20&quot;       
 ## [17] &quot;X2.3.20&quot;        &quot;X2.4.20&quot;        &quot;X2.5.20&quot;        &quot;X2.6.20&quot;</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="data-sources.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># And all the later columns are time series data up to now. Each column represent the total death number up to that day.</span></span></code></pre></div>
+<p>And all the later columns are time series data up to now. Each column represent the total death number up to that day.</p>
 </div>
 <div id="gdp-data" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> GDP Data<a href="data-sources.html#gdp-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Our GDP data is downloaded from <a href="https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators">The World Bank</a>. We used the world development indicators database, which is the primary World Bank collection of development indicators, compiled from officially recognized international sources. And it presents the most current and accurate global development data available, and includes national, regional and global estimates.</p>
 <p><img src="docs/gdp_web_Image.png" alt="COVID Data Center Website" />
 As shown above, we include all Countries and Time(Years) available, and GDP is what we need.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="data-sources.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">&#39;The row number of GDP dataset is %.0f, and the column number is %.0f.&#39;</span>, <span class="fu">dim</span>(GDP)[<span class="dv">1</span>], <span class="fu">dim</span>(GDP)[<span class="dv">2</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="data-sources.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">&#39;The row number of GDP dataset is %.0f, and the column number is %.0f.&#39;</span>, <span class="fu">dim</span>(GDP)[<span class="dv">1</span>], <span class="fu">dim</span>(GDP)[<span class="dv">2</span>])</span></code></pre></div>
 <pre><code>## [1] &quot;The row number of GDP dataset is 271, and the column number is 66.&quot;</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="data-sources.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The Names including</span></span>
-<span id="cb12-2"><a href="data-sources.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">colnames</span>(GDP)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="data-sources.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The Names including</span></span>
+<span id="cb11-2"><a href="data-sources.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">colnames</span>(GDP)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>])</span></code></pre></div>
 <pre><code>##  [1] &quot;ï..Series.Name&quot; &quot;Series.Code&quot;    &quot;Country.Name&quot;   &quot;Country.Code&quot;  
 ##  [5] &quot;X1960..YR1960.&quot; &quot;X1961..YR1961.&quot; &quot;X1962..YR1962.&quot; &quot;X1963..YR1963.&quot;
 ##  [9] &quot;X1964..YR1964.&quot; &quot;X1965..YR1965.&quot; &quot;X1966..YR1966.&quot; &quot;X1967..YR1967.&quot;
 ## [13] &quot;X1968..YR1968.&quot; &quot;X1969..YR1969.&quot; &quot;X1970..YR1970.&quot; &quot;X1971..YR1971.&quot;
 ## [17] &quot;X1972..YR1972.&quot; &quot;X1973..YR1973.&quot; &quot;X1974..YR1974.&quot; &quot;X1975..YR1975.&quot;</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="data-sources.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># And all the later columns are time series data up to now.</span></span></code></pre></div>
+<p>All the later columns are time series data up to now.</p>
 
 </div>
 </div>

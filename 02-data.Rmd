@@ -40,8 +40,9 @@ sprintf('The row number of covid dataset is %.0f, and the column number is %.0f.
 ```{r}
 # The Names including
 print(colnames(COVID)[1:20])
-# And all the later columns are time series data up to now. Each column represent the total death number up to that day.
 ```
+
+And all the later columns are time series data up to now. Each column represent the total death number up to that day.
 
 ## GDP Data
 
@@ -57,7 +58,6 @@ sprintf('The row number of GDP dataset is %.0f, and the column number is %.0f.',
 ```{r}
 # The Names including
 print(colnames(GDP)[1:20])
-# And all the later columns are time series data up to now.
 ```
 
-
+All the later columns are time series data up to now.
