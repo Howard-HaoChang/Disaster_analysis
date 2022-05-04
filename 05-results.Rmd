@@ -250,7 +250,7 @@ Now we want to compare the ovid damage with the disaster damage. However the Cov
 
 First we need to find out the target countries and then making predictions.
 ```{r}
-target.Country = c('China','US','Russia','India','Brazil','Japan','France','Italy','South Africa','Egypt')
+target.Country = c('France','Italy','Germany','Russia','UK','US','Canada','Brazil','Peru','Australia','New Zealand','China','India','Japan', 'Iraq', 'Saudi Arabia','South Africa','Egypt', 'Ethiopia', 'Uganda')
 
 GDP = read.csv('data/GDP.csv') %>%
     select(-X) %>%
@@ -290,21 +290,24 @@ for(c in target.Country){
 ```
 
 Since we've already get the estimate, we want to see the difference between real data and the estimate
-```{r}
+```{r, fig.height=20, fig.width=10}
 GDPplot = GDP %>%
   left_join(data.frame(est = forecastgdp, Country.Name = target.Country)) %>% 
-  mutate(est = ifelse(year!=2020, gdp, est)) %>%
+  mutate(est = ifelse(year!=2020, gdp, est), Country.Name = fct_relevel(Country.Name,
+          c('France','Italy','Germany','Russia','UK','US','Canada','Brazil','Peru','Australia',
+            'New Zealand','China','India','Japan', 'Iraq', 'Saudi Arabia','South Africa',
+            'Egypt', 'Ethiopia', 'Uganda'))) %>%
   filter(year > 2013)
 
 col = c(estimate = 'red', real = 'black')
 ggplot(GDPplot)+
   geom_line(aes(year, est, col = 'estimate'))+
   geom_line(aes(year, gdp, col = 'real'))+
-  facet_wrap(~Country.Name, scales = "free_y", nrow = 5)+
+  facet_wrap(~Country.Name, scales = "free_y", nrow = 10)+
   scale_colour_manual(name = "Type", values = col)
 ```
 
-As we can see from the plot, all the countries suffered from a GDP decrease in 2020 except China and Egypt. For China, the reason is that it use a compulsory policy to prevent the Covid from spreading thus control the cases. For Egypt, 
+As we can see from the plot, all the countries suffered from a GDP decrease in 2020 except China, Egypt, Ethiopia and Uganda. For China, the reason is that it use a compulsory policy to prevent the Covid from spreading thus control the cases. For the African countries, they are now going through a rapid economic increasing which can not be shown by the time series model, so that their real value are larger than the estimate value.
 
 ```{r}
 disaster = read.csv('data/disaster.csv') %>%
@@ -318,7 +321,13 @@ coviddamage = GDPplot %>%
   mutate(diff = est - gdp) %>% 
   left_join(disaster, by  = c('Country.Name'='Country'))
 
-ggplot(coviddamage, aes(x=log(Damage), y = log(diff)))+
-  geom_point(aes(color = Continent), size = 5)
+g = ggplot(coviddamage, aes(x=log(Damage), y = log(diff+abs(min(coviddamage$diff))), text = Country.Name))+
+  geom_point(aes(color = Continent), size = 3)+
+  labs(x = 'Damage(log)',
+       y = 'The GDP difference(Scaled log)',
+       title = 'The damage from Covid vs. other Disaster')
+
+ggplotly(g)
 ```
 
+As we can see from the plot, The countries from Oceania forms a cluster under the line which means that the Damage from other Disaster is far more larger than the Covid damage. It's because These countries are far from mainland and will not that suffer from covid. For African countries, they are really suffer from other disease like Ebola instead of Covid. For Western and Mid Asian countries, they are suffering from an economic crisis so the GDP decrease can't really represent the true Covid damage.
