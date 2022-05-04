@@ -3,11 +3,11 @@ library(shiny)
 library(plotly)
 
 # read the disaster data and the map data
-disaster = read.csv('disaster.csv') %>%
+disaster = read.csv('Shiny/disaster.csv') %>%
     select(-X)
-mapdata = read.csv('Location.csv') %>%
+mapdata = read.csv('Shiny/Location.csv') %>%
     select(-X)
-GDP = read.csv('GDP.csv') %>%
+GDP = read.csv('Shiny/GDP.csv') %>%
     select(-X) %>%
     pivot_longer(cols = X1960:X2020, values_to = 'gdp', names_to = 'year') %>%
     mutate(year = as.numeric(substr(year, 2, 5)))
@@ -72,9 +72,7 @@ server <- function(input, output) {
                 # draw a map filled by log10(deaths), and separate each country by black lines
                 scale_fill_gradient(low = '#FFF68F',high = '#FC4902') +
                 # use a common used heat map color setting
-                labs(title = 'Number of log GDP for Every Country')+
-                # rename the plot
-                ggdark::dark_theme_bw() 
+                labs(title = 'Number of log GDP for Every Country')
         } else if(input$Variable == 'Damage'){
             g = ggplot(df(), aes(x = long, y = lat, group = group, text = Country))+ 
                 # take longitude and latitude as x and y, a certain region as a group
@@ -82,9 +80,7 @@ server <- function(input, output) {
                 # draw a map filled by log10(deaths), and separate each country by black lines
                 scale_fill_gradient(low = '#FFF68F',high = '#FC4902') +
                 # use a common used heat map color setting
-                labs(title = 'Number of log Damage for Every Country')+
-                # rename the plot
-                ggdark::dark_theme_bw()
+                labs(title = 'Number of log Damage for Every Country')
         } else if(input$Variable == 'Adjusted Damage'){
             g = ggplot(df(), aes(x = long, y = lat, group = group, text = Country))+ 
                 # take longitude and latitude as x and y, a certain region as a group
@@ -92,9 +88,7 @@ server <- function(input, output) {
                 # draw a map filled by log10(deaths), and separate each country by black lines
                 scale_fill_gradient(low = '#FFF68F',high = '#FC4902') +
                 # use a common used heat map color setting
-                labs(title = 'Number of log adjusted Damage for Every Country')+
-                # rename the plot
-                ggdark::dark_theme_bw() 
+                labs(title = 'Number of log adjusted Damage for Every Country')
         } else if(input$Variable == 'Deaths'){
             g = ggplot(df(), aes(x = long, y = lat, group = group, text = Country))+ 
                 # take longitude and latitude as x and y, a certain region as a group
@@ -102,9 +96,7 @@ server <- function(input, output) {
                 # draw a map filled by log10(deaths), and separate each country by black lines
                 scale_fill_gradient(low = '#FFF68F',high = '#FC4902') +
                 # use a common used heat map color setting
-                labs(title = 'Number of log Deaths for Every Country')+
-                # rename the plot
-                ggdark::dark_theme_bw() 
+                labs(title = 'Number of log Deaths for Every Country')
         }
         
         ggplotly(g, tooltip = c("text",'fill'))
