@@ -1,0 +1,46 @@
+# Results
+
+```{r, message=FALSE, echo=FALSE, results='hide'}
+library(tidyverse)
+```
+
+## COVID Data Exploration
+
+Our cleared COVID data have a column of Country and the summed total death since the start of COVID. We can see from the summary, there are 195 Countries. The maximum death is 993,999 and minimum is 0. The average death is 31991. Since Country is a multi-categorical variable, and Death is continuous variable, we will use Cleveland Dot Plot first to see its general idea. Then, we will use geometrical heatmap to do some spatial analysis.
+
+```{r, message=FALSE}
+df_covid = read.csv("data/covid.csv") %>% select(-X)
+summary(df_covid)
+```
+
+### Cleveland Dot Plot
+
+```{r, fig.height=8, fig.width=6}
+df_covid %>% arrange(desc(Total.Death)) %>% head(50) %>% 
+   mutate("Country.Region" = fct_reorder(Country.Region, Total.Death)) %>% 
+  ggplot(aes(x = Total.Death, y = Country.Region)) + 
+  geom_point(color = "#D75D47", size = 2) +
+  labs(title = 'COVID-19 Cumulative Death of Countries',
+       y = '', x = "Total Death")
+```
+
+Above plot showed the total death of the top 50 countries in descending order. As we can see, United States have the largest death number, which is close to 1000k. Besides the US, four other countries stood out: Brazil, India, Russia, and Mexico. These five countries have much more cases than others, one reason is they have comparatively large population size. Three out of five top countries are in America. Another level is from Peru to Turkey. In this level many countries are European countries with smaller population. The main reason for their total death could be related to policies.
+
+### Heatmap
+
+```{r}
+df_map = read.csv("data/Location.csv")
+df_covid %>% left_join(df_map, 
+                       by = c("Country.Region" = "Country")) %>% 
+  ggplot(aes(x = long, y = lat, group = group, text = Country.Region)) +
+  geom_polygon(aes(fill = Total.Death), color = "#AAABAC") + 
+  scale_fill_gradient(low = "#FBD588", high = "#F55536") +
+  labs(title = "COVID-19 Cumulative Death World Heatmap",
+       fill = "Total Death", x = "", y = "")
+  
+```
+We plotted the heatmap to see some geographic pattern. As we can see most of the darker countries have a vast territory, and along with that larger population. Population could also be the reason African and European countries have comparatively pale colors. Another reason for Africa to have less death could be that COVID virus is afraid of heat. Island countries are less likely to contaminated by others, so they seems to have less deaths in general.
+
+
+
+
