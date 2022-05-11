@@ -315,7 +315,9 @@ ggplot(GDPplot)+
   geom_line(aes(year, est, col = 'estimate'))+
   geom_line(aes(year, gdp, col = 'real'))+
   facet_wrap(~Country.Name, scales = "free_y", nrow = 10)+
-  scale_colour_manual(name = "Type", values = col)
+  scale_colour_manual(name = "Type", values = col)+
+  labs(title = 'The real number and estimate number of GDP in different countries',
+    y = 'GDP')
 ```
 
 As we can see from the plot, all the countries suffered from a GDP decrease in 2020 except China, Egypt, Ethiopia and Uganda. For China, the reason is that it use a compulsory policy to prevent the Covid from spreading thus control the cases. For the African countries, they are now going through a rapid economic increasing which can not be shown by the time series model, so that their real value are larger than the estimate value.
